@@ -1,0 +1,28 @@
+spring:
+  config:
+    import: classpath:secret.yml
+    activate:
+      on-profile: deploy
+
+  jpa:
+    hibernate:
+      ddl-auto: validate  # 운영 환경에서는 validate 사용
+    properties:
+      hibernate:
+        show_sql: false  # 운영 환경에서는 false로 설정
+        format_sql: false
+        use_sql_comments: false
+    generate-ddl: false
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${mysql.deploy_url}
+    username: ${mysql.deploy_username}
+    password: ${mysql.deploy_password}
+
+logging:
+  level:
+    root: INFO
+    com.pedia.movie: INFO  # 운영 환경에서는 INFO로 설정
+    org.hibernate.orm.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
