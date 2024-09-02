@@ -2,4 +2,4 @@ spring:
   config:
     import: classpath:secret.yml
   profiles:
-    active: deploy  # 기본 환경 local
+    active: local  # 기본 환경 local
