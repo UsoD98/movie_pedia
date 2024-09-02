@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Form</title>
+
+</head>
+<body>
+<section layout:fragment="content">
+    <p>Register page</p>
+    <form th:action="@{/users/register}" method="post">
+        <label for="name">name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br>
+        <input type="submit" value="회원가입">
+    </form>
+</section>
+</body>
+</html>

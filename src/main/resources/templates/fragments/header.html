@@ -2,5 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <header th:fragment="header">
     <p>Header</p>
+    <div th:if="${session.user != null}">
+        <a th:href="@{/users/logout}">Logout</a>
+        <a th:href="@{/users/myPage}">My Page</a>
+    </div>
+    <div th:if="${session.user == null}">
+        <a th:href="@{/users/register}">Register</a>
+        <a th:href="@{/users/login}">Login</a>
+    </div>
 </header>
 </html>

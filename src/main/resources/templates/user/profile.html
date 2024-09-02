@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+
+</head>
+<body>
+<section layout:fragment="content">
+    <p>Profile</p>
+    <p>name: <span th:text="${user.name}"></span></p>
+    <p>팔로워: <span th:text="${user.followers}"></span></p>
+    <p>팔로잉: <span th:text="${user.followings}"></span></p>
+    <p>평가 수: <span th:text="${user.ratingsCount}"></span></p>
+    <p>코멘트 수: <span th:text="${user.commentsCount}"></span></p>
+    <p>보고싶어요 수: <span th:text="${user.wishCount}"></span></p>
+    <p>보고있어요 수: <span th:text="${user.watchingCount}"></span></p>
+</section>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Form</title>
+
+</head>
+<body>
+<section layout:fragment="content">
+    <p>Login page</p>
+    <form th:action="@{/users/login}" method="post">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br>
+        <input type="submit" value="로그인">
+    </form>
+</section>
+</body>
+</html>
