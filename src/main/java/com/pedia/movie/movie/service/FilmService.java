@@ -2,6 +2,7 @@ package com.pedia.movie.movie.service;
 
 import com.pedia.movie.movie.dto.DailyBoxOfficeResponse;
 import com.pedia.movie.movie.dto.TMDBResponse;
+import com.pedia.movie.movie.dto.WeeklyBoxOfficeResponse;
 import com.pedia.movie.movie.entity.Film;
 import com.pedia.movie.movie.repository.FilmRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,9 @@ public class FilmService {
     @Value("${kobis.api.url}")
     private String KOBIS_API_URL;
 
+    @Value("${kobis.api.week_url}")
+    private String KOBIS_API_WEEK_URL;
+
     @Value("${kobis.api.key}")
     private String KOBIS_API_KEY;
 
@@ -42,6 +46,7 @@ public class FilmService {
 
         List<Film> films = new ArrayList<>();
         if(dailyBoxOfficeResponse != null && dailyBoxOfficeResponse.getBoxOfficeResult() != null) {
+            //daily
             for(DailyBoxOfficeResponse.DailyBoxOfficeMovie dailyBoxOfficeMovie : dailyBoxOfficeResponse.getBoxOfficeResult().getDailyBoxOfficeList()) {
                 Film film = filmRepository.findByMovieCd(Long.parseLong(dailyBoxOfficeMovie.getMovieCd()));
                 log.info("film: {}", film);
@@ -50,6 +55,34 @@ public class FilmService {
                     film = getMovieFromTMDB(dailyBoxOfficeMovie.getMovieNm());
                     if(film != null) {
                         film.setMovieCd(Long.parseLong(dailyBoxOfficeMovie.getMovieCd()));
+                        filmRepository.save(film);
+//                        log.info("film: {}", film);
+                    }
+                }
+                films.add(film);
+            }
+        }
+        log.info("films: {}", films);
+        return films;
+    }
+
+    public List<Film> getWeeklyBoxOffice(String targetDate) {
+        String url = KOBIS_API_WEEK_URL + "?key=" + KOBIS_API_KEY + "&targetDt=" + targetDate;
+        System.out.println(url);
+        WeeklyBoxOfficeResponse weeklyBoxOfficeResponse = restTemplate.getForObject(url, WeeklyBoxOfficeResponse.class);
+        log.info("WeeklyBoxOfficeResponse: {}", weeklyBoxOfficeResponse);
+
+        List<Film> films = new ArrayList<>();
+        if(weeklyBoxOfficeResponse != null && weeklyBoxOfficeResponse.getBoxOfficeResult() != null) {
+            //daily
+            for(WeeklyBoxOfficeResponse.WeeklyBoxOfficeMovie weeklyBoxOfficeMovie : weeklyBoxOfficeResponse.getBoxOfficeResult().getWeeklyBoxOfficeList()) {
+                Film film = filmRepository.findByMovieCd(Long.parseLong(weeklyBoxOfficeMovie.getMovieCd()));
+                log.info("film: {}", film);
+                if(film == null) {
+                    log.info("film is null");
+                    film = getMovieFromTMDB(weeklyBoxOfficeMovie.getMovieNm());
+                    if(film != null) {
+                        film.setMovieCd(Long.parseLong(weeklyBoxOfficeMovie.getMovieCd()));
                         filmRepository.save(film);
 //                        log.info("film: {}", film);
                     }

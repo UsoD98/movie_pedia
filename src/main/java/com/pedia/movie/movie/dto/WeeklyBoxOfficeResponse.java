@@ -10,40 +10,50 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-public class DailyBoxOfficeResponse {
+public class WeeklyBoxOfficeResponse {
     @JsonProperty("boxOfficeResult")
-    private BoxOfficeResult boxOfficeResult;
+    private WeeklyBoxOfficeResult boxOfficeResult;
 
-    public BoxOfficeResult getBoxOfficeResult() {
+    public WeeklyBoxOfficeResult getBoxOfficeResult() {
         return boxOfficeResult;
     }
 
-    public void setBoxOfficeResult(BoxOfficeResult boxOfficeResult) {
-        this.boxOfficeResult = boxOfficeResult;
+    public void setBoxOfficeResult(WeeklyBoxOfficeResult weeklyboxOfficeResult) {
+        this.boxOfficeResult = weeklyboxOfficeResult;
     }
 
     @Getter
     @Setter
-    public static class BoxOfficeResult {
+    public static class WeeklyBoxOfficeResult {
         @JsonProperty("boxofficeType")
         private String boxofficeType;
 
         @JsonProperty("showRange")
         private String showRange;
 
-        @JsonProperty("dailyBoxOfficeList")
-        private List<DailyBoxOfficeMovie> dailyBoxOfficeList;
+        @JsonProperty("weeklyBoxOfficeList")
+        private List<WeeklyBoxOfficeMovie> weeklyBoxOfficeList;
 
     }
 
     @Getter
     @Setter
-    public static class DailyBoxOfficeMovie {
+    public static class WeeklyBoxOfficeMovie {
+
+        @JsonProperty("boxofficeType")
+        private String boxofficeType;
+
+        @JsonProperty("showRange")
+        private String showRange;
+
+        @JsonProperty("yearWeekTime")
+        private String yearWeekTime;
+
         @JsonProperty("rnum")
         private String rnum;
 
         @JsonProperty("rank")
-        private String rank;
+        private  String rank;
 
         @JsonProperty("rankInten")
         private String rankInten;
@@ -69,6 +79,7 @@ public class DailyBoxOfficeResponse {
         @JsonProperty("salesInten")
         private String salesInten;
 
+
         @JsonProperty("salesChange")
         private String salesChange;
 
@@ -93,8 +104,5 @@ public class DailyBoxOfficeResponse {
         @JsonProperty("showCnt")
         private String showCnt;
 
-
-
-        // Getters and setters
     }
 }
