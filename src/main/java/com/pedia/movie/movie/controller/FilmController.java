@@ -1,6 +1,7 @@
 package com.pedia.movie.movie.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pedia.movie.movie.dto.FilmDetailResponse;
 import com.pedia.movie.movie.entity.Film;
 import com.pedia.movie.movie.service.FilmService;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -51,5 +52,17 @@ public class FilmController {
 
         return "weekly_films";
     }
+
+    @GetMapping("/films/{id}")
+    public String getFilmDetail(Model model, @PathVariable("id") Long id) {
+        FilmDetailResponse filmDetailResponse = filmService.getFilmDetail(id);
+        if (filmDetailResponse != null) {
+            model.addAttribute("film", filmDetailResponse);
+            return "filmDetail";
+        } else {
+            return "redirect:/films";
+        }
+    }
+
 
 }

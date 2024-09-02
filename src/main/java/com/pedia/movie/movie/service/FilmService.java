@@ -1,6 +1,7 @@
 package com.pedia.movie.movie.service;
 
 import com.pedia.movie.movie.dto.DailyBoxOfficeResponse;
+import com.pedia.movie.movie.dto.FilmDetailResponse;
 import com.pedia.movie.movie.dto.TMDBResponse;
 import com.pedia.movie.movie.dto.WeeklyBoxOfficeResponse;
 import com.pedia.movie.movie.entity.Film;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -45,15 +47,15 @@ public class FilmService {
         log.info("dailyBoxOfficeResponse: {}", dailyBoxOfficeResponse);
 
         List<Film> films = new ArrayList<>();
-        if(dailyBoxOfficeResponse != null && dailyBoxOfficeResponse.getBoxOfficeResult() != null) {
+        if (dailyBoxOfficeResponse != null && dailyBoxOfficeResponse.getBoxOfficeResult() != null) {
             //daily
-            for(DailyBoxOfficeResponse.DailyBoxOfficeMovie dailyBoxOfficeMovie : dailyBoxOfficeResponse.getBoxOfficeResult().getDailyBoxOfficeList()) {
+            for (DailyBoxOfficeResponse.DailyBoxOfficeMovie dailyBoxOfficeMovie : dailyBoxOfficeResponse.getBoxOfficeResult().getDailyBoxOfficeList()) {
                 Film film = filmRepository.findByMovieCd(Long.parseLong(dailyBoxOfficeMovie.getMovieCd()));
                 log.info("film: {}", film);
-                if(film == null) {
+                if (film == null) {
                     log.info("film is null");
                     film = getMovieFromTMDB(dailyBoxOfficeMovie.getMovieNm());
-                    if(film != null) {
+                    if (film != null) {
                         film.setMovieCd(Long.parseLong(dailyBoxOfficeMovie.getMovieCd()));
                         filmRepository.save(film);
 //                        log.info("film: {}", film);
@@ -73,15 +75,15 @@ public class FilmService {
         log.info("WeeklyBoxOfficeResponse: {}", weeklyBoxOfficeResponse);
 
         List<Film> films = new ArrayList<>();
-        if(weeklyBoxOfficeResponse != null && weeklyBoxOfficeResponse.getBoxOfficeResult() != null) {
+        if (weeklyBoxOfficeResponse != null && weeklyBoxOfficeResponse.getBoxOfficeResult() != null) {
             //daily
-            for(WeeklyBoxOfficeResponse.WeeklyBoxOfficeMovie weeklyBoxOfficeMovie : weeklyBoxOfficeResponse.getBoxOfficeResult().getWeeklyBoxOfficeList()) {
+            for (WeeklyBoxOfficeResponse.WeeklyBoxOfficeMovie weeklyBoxOfficeMovie : weeklyBoxOfficeResponse.getBoxOfficeResult().getWeeklyBoxOfficeList()) {
                 Film film = filmRepository.findByMovieCd(Long.parseLong(weeklyBoxOfficeMovie.getMovieCd()));
                 log.info("film: {}", film);
-                if(film == null) {
+                if (film == null) {
                     log.info("film is null");
                     film = getMovieFromTMDB(weeklyBoxOfficeMovie.getMovieNm());
-                    if(film != null) {
+                    if (film != null) {
                         film.setMovieCd(Long.parseLong(weeklyBoxOfficeMovie.getMovieCd()));
                         filmRepository.save(film);
 //                        log.info("film: {}", film);
@@ -100,7 +102,7 @@ public class FilmService {
         TMDBResponse tmdbResponse = restTemplate.getForObject(url, TMDBResponse.class);
         log.info("tmdbResponse: {}", tmdbResponse);
 
-        if(tmdbResponse != null && !tmdbResponse.getResults().isEmpty()) {
+        if (tmdbResponse != null && !tmdbResponse.getResults().isEmpty()) {
             TMDBResponse.TMDBMovie tmdbMovie = tmdbResponse.getResults().get(0);
             Film film = new Film();
             film.setMovieId(tmdbMovie.getId());
@@ -114,6 +116,11 @@ public class FilmService {
             return film;
         }
         return null;
+    }
+
+    public FilmDetailResponse getFilmDetail(Long id) {
+        Optional<Film> film = filmRepository.findById(id);
+        return film.map(FilmDetailResponse::from).orElse(null);
     }
 
 }
