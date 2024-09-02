@@ -37,4 +37,19 @@ public class FilmController {
         return "films";
     }
 
+    @GetMapping("/weekly_films")
+    public String getWeekFilms(Model model) {
+        String targetDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.BASIC_ISO_DATE);
+        List<Film> weeklyBoxOffice = filmService.getWeeklyBoxOffice(targetDate);
+        try {
+            log.info("Weekly Box Office data: {}", objectMapper.writeValueAsString(weeklyBoxOffice));
+        } catch (Exception e) {
+            log.error("Error logging daily box office data", e);
+        }
+
+        model.addAttribute("weeklyBoxOffice", weeklyBoxOffice);
+
+        return "weekly_films";
+    }
+
 }
