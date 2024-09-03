@@ -6,12 +6,12 @@
     <title>Layout page</title>
     <!-- header-css -->
     <style>
-<!--        /* 헤더 */-->
+        /* 헤더 */
         header {
             border-bottom: 1px solid rgb(230, 230, 230);
             background-color: white;
 
-<!--            /* 헤더 고정 */-->
+            /* 헤더 고정 */
             position: fixed;
             top: 0;
             z-index: 9999;
@@ -29,7 +29,7 @@
             display: flex;
         }
 
-<!--        /* 헤더 로고 */-->
+        /* 헤더 로고 */
         header nav div h1 {
             width: 150px;
         }
@@ -93,14 +93,14 @@
             cursor: pointer;
         }
 
-        #login-form input[type="button"]{
+        #lg-form a:first-child{
             background-color: transparent;
             padding: 0.5rem;
         }
 
-        #register-form input[type="button"]{
+        #lg-form a:last-child{
             background-color: transparent;
-            padding: 0.5rem;
+<!--            padding: 0.5rem;-->
             border: 1px solid rgb(218, 218, 218);
             border-radius: 5px;
         }
@@ -236,9 +236,10 @@
 
     #sns-icon #sns-icon-list{
         display: flex;
+        justify-content: space-between;
     }
 
-    #sns-icon #sns-icon-list i{
+    #sns-icon #sns-icon-list p{
         margin-left: 0.7rem;
         font-size: 1.5rem;
         cursor: pointer;
