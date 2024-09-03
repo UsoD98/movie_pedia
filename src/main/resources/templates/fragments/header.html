@@ -17,36 +17,25 @@
         </div>
         <div id="form">
             <div id="form-box">
-                <form id="search-form">
-                    <input id="search-input" type="search" value="콘텐츠, 인물, 위치, 유저를 검색해보세요">
-                    <button class="clear-button"  type="button">
+                <form id="search-form" action="/films/search" method="get">
+                    <input id="search-input" type="search" name="title" placeholder="콘텐츠, 인물, 위치, 유저를 검색해보세요" required>
+                    <button class="clear-button" type="button">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </button>
+                    <button type="submit" style="display: none;">검색</button>
                 </form>
                 <div id="lr-form">
-                    <a>로그인</a>
-                    <a>회원가입</a>
+                    <div th:if="${session.user != null}">
+                        <a th:href="@{/users/logout}">로그아웃</a>
+                        <a th:href="@{/users/myPage}">마이페이지</a>
+                    </div>
+                    <div th:if="${session.user == null}">
+                        <a th:href="@{/users/login}">로그인</a>
+                        <a th:href="@{/users/register}">회원가입</a>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
-
-
-
-
-
-<!--    <p>Header</p>-->
-    <div th:if="${session.user != null}">
-        <a th:href="@{/users/logout}">Logout</a>
-        <a th:href="@{/users/myPage}">My Page</a>
-    </div>
-    <div th:if="${session.user == null}">
-        <a th:href="@{/users/register}">Register</a>
-        <a th:href="@{/users/login}">Login</a>
-    </div>
-    <form action="/films/search" method="get" class="form-inline mb-4">
-        <input type="text" name="title" class="form-control mr-2" placeholder="영화 제목 입력" required>
-        <button type="submit" class="btn btn-primary">검색</button>
-    </form>
 </header>
 </html>
