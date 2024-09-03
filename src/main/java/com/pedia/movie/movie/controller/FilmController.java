@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pedia.movie.movie.dto.FilmDetailResponse;
 import com.pedia.movie.movie.entity.Film;
 import com.pedia.movie.movie.entity.FilmImg;
+import com.pedia.movie.movie.entity.FilmVideo;
 import com.pedia.movie.movie.service.FilmService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -61,11 +62,10 @@ public class FilmController {
         if (filmDetailResponse != null) {
 
             List<FilmImg> imgList = filmService.getFilmDetailImg(filmDetailResponse.getMovieId());
-//            FilmVideoResponse filmVideoResponse = filmService.getFilmDetailVideo(filmDetailResponse.getMovieId());
+            List<FilmVideo> videoList = filmService.getFilmDetailVideo(filmDetailResponse.getMovieId());
 
             model.addAttribute("film_img",imgList);
-//            model.addAttribute("film_video",filmVideoResponse);
-
+            model.addAttribute("film_video",videoList);
             model.addAttribute("film", filmDetailResponse);
             return "filmDetail";
         } else {

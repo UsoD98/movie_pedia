@@ -40,5 +40,6 @@ public class Film {
     @OneToMany(mappedBy ="film", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FilmImg> filmImgSet;
 
-
+    @OneToMany(mappedBy ="film", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FilmVideo> filmVideoSet;
 }

@@ -5,24 +5,18 @@ import lombok.Data;
 
 @Entity
 @Data
-public class FilmImg {
+public class FilmVideo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Column
-    private Long Width;
-
-    @Column
-    private Long Height;
+    private String videoName;
 
     @Column(nullable = false)
-    private String filePath;
+    private String videoKey;
 
     @ManyToOne
     @JoinColumn(name = "film_movie_id", referencedColumnName = "movieId")
     private Film film;
-
 }
