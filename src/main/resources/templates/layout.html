@@ -20,9 +20,9 @@
 
         header nav {
             display: flex;
-            margin: 0 10rem;
             justify-content: space-between;
-
+            margin: 0 10rem;
+            margin-top: 0.5rem;
         }
 
         header nav div {
@@ -31,7 +31,7 @@
 
         /* 헤더 로고 */
         header nav div h1 {
-            width: 150px;
+            margin-top: 0.7rem;
         }
 
         /* 헤더 메뉴 */
@@ -40,7 +40,7 @@
             justify-content: center;
             align-items: center;
             gap: 9%;
-            width: 220px;
+            width: 200px;
             padding: 1rem;
 
             color: rgb(104, 103, 103);
@@ -55,23 +55,23 @@
 
         header nav #form #form-box {
             display: flex;
-            padding: 1rem;
-            gap: 1%;
         }
 
+        /* 검색 폼 */
         input::-webkit-search-decoration,
         input::-webkit-search-cancel-button,
         input::-webkit-search-results-button,
-        input::-webkit-search-results-decoration{
+        input::-webkit-search-results-decoration {
             /* 검색창 default clear 제거 */
-            display:none;
+            display: none;
         }
 
         #search-form {
             position: relative;
+            margin-top: 0.5rem;
         }
 
-        #search-form input{
+        #search-form input {
             background-color: rgb(247, 246, 246);
             outline: none;
             color: #696969;
@@ -82,27 +82,35 @@
             margin-top: 3px;
         }
 
-        #search-form button{
+        #search-form button {
             position: absolute;
             top: 0.7rem;
             right: 0;
 
             background-color: rgb(247, 246, 246);
             font-size: 1rem;
-            color:#a7a7a8;
+            color: #a7a7a8;
             cursor: pointer;
         }
 
-        #lg-form a:first-child{
+        /* 로그인, 회원가입 폼 */
+        #lr-form a:first-child {
             background-color: transparent;
-            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+
+            width: 4rem;
+            padding-top: 1.1rem;
         }
 
-        #lg-form a:last-child{
+        #lr-form a:last-child {
             background-color: transparent;
-<!--            padding: 0.5rem;-->
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            margin-top: 0.5rem;
             border: 1px solid rgb(218, 218, 218);
             border-radius: 5px;
+            font-size: 0.85rem;
         }
     </style>
     <!-- footer-css -->
