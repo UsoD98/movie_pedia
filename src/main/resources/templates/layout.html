@@ -5,7 +5,106 @@
 <head>
     <title>Layout page</title>
     <!-- header-css -->
+    <style>
+<!--        /* 헤더 */-->
+        header {
+            border-bottom: 1px solid rgb(230, 230, 230);
+            background-color: white;
 
+<!--            /* 헤더 고정 */-->
+            position: fixed;
+            top: 0;
+            z-index: 9999;
+            width: 100%;
+        }
+
+        header nav {
+            display: flex;
+            margin: 0 10rem;
+            justify-content: space-between;
+
+        }
+
+        header nav div {
+            display: flex;
+        }
+
+<!--        /* 헤더 로고 */-->
+        header nav div h1 {
+            width: 150px;
+        }
+
+        /* 헤더 메뉴 */
+        header nav div ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 9%;
+            width: 220px;
+            padding: 1rem;
+
+            color: rgb(104, 103, 103);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* 헤더 폼 */
+        header nav #form {
+            display: flex;
+        }
+
+        header nav #form #form-box {
+            display: flex;
+            padding: 1rem;
+            gap: 1%;
+        }
+
+        input::-webkit-search-decoration,
+        input::-webkit-search-cancel-button,
+        input::-webkit-search-results-button,
+        input::-webkit-search-results-decoration{
+            /* 검색창 default clear 제거 */
+            display:none;
+        }
+
+        #search-form {
+            position: relative;
+        }
+
+        #search-form input{
+            background-color: rgb(247, 246, 246);
+            outline: none;
+            color: #696969;
+
+            padding: 0.5rem;
+            padding-right: 2rem;
+            width: 250px;
+            margin-top: 3px;
+        }
+
+        #search-form button{
+            position: absolute;
+            top: 0.7rem;
+            right: 0;
+
+            background-color: rgb(247, 246, 246);
+            font-size: 1rem;
+            color:#a7a7a8;
+            cursor: pointer;
+        }
+
+        #login-form input[type="button"]{
+            background-color: transparent;
+            padding: 0.5rem;
+        }
+
+        #register-form input[type="button"]{
+            background-color: transparent;
+            padding: 0.5rem;
+            border: 1px solid rgb(218, 218, 218);
+            border-radius: 5px;
+        }
+    </style>
     <!-- footer-css -->
 
     <!-- toastMessage.css -->
