@@ -1,6 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <header th:fragment="header">
+    <nav>
+        <div>
+            <div>
+                <img src="image/WATCHA_PEDIA_Logo_Main1.svg" alt="main watch logo">
+            </div>
+            <div>
+                <ul>
+                    <li>영화</li>
+                    <li>시리즈</li>
+                    <li>책</li>
+                    <li>웹툰</li>
+                </ul>
+            </div>
+        </div>
+        <div id="form">
+            <div id="form-box">
+                <form id="search-form">
+                    <input id="search-input" type="search" value="콘텐츠, 인물, 위치, 유저를 검색해보세요">
+                    <button class="clear-button"  type="button">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </form>
+                <form id="login-form">
+                    <input type="button" value="로그인">
+                </form>
+                <form id="register-form">
+                    <input type="button" value="회원가입">
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
     <p>Header</p>
     <div th:if="${session.user != null}">
         <a th:href="@{/users/logout}">Logout</a>
