@@ -11,12 +11,20 @@
 <section layout:fragment="content">
     <p>Profile</p>
     <p>name: <span th:text="${user.name}"></span></p>
-    <p>팔로워: <span th:text="${user.followers}"></span></p>
-    <p>팔로잉: <span th:text="${user.followings}"></span></p>
+    <p>팔로워: <a th:href="@{'/users/profile/' + ${user.id} + '/followers'}" th:text="${user.followers}"></a></p>
+    <p>팔로잉: <a th:href="@{'/users/profile/' + ${user.id} + '/followings'}" th:text="${user.followings}"></a></p>
     <p>평가 수: <span th:text="${user.ratingsCount}"></span></p>
     <p>코멘트 수: <span th:text="${user.commentsCount}"></span></p>
     <p>보고싶어요 수: <span th:text="${user.wishCount}"></span></p>
     <p>보고있어요 수: <span th:text="${user.watchingCount}"></span></p>
+
+    <!-- 현재 로그인한 사용자와 프로필 사용자가 다른 경우에만 버튼을 표시 -->
+    <div th:if="${session.user != null and session.user != user.id}">
+        <!-- 팔로우 상태에 따라 버튼 텍스트와 동작 변경 -->
+        <form th:action="@{'/users/' + ${session.user} + '/' + (${isFollowing} ? 'unfollow' : 'follow') + '/' + ${user.id}}" method="post">
+            <button type="submit" th:text="${isFollowing ? '언팔로우' : '팔로우'}"></button>
+        </form>
+    </div>
 </section>
 </body>
 </html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>팔로워</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>팔로워</h1>
+    <ul>
+        <li th:each="follower : ${followers}">
+            <a th:href="@{'/users/profile/' + ${follower.id}}">
+                <img src="https://via.placeholder.com/50" alt="Profile Image" width="50" height="50">
+                <span th:text="${follower.name}"></span>
+                <span th:text="'평가 ' + ${follower.ratingsCount} + ' · 코멘트 ' + ${follower.commentsCount}"></span>
+            </a>
+            <div th:if="${session.user != null and session.user != follower.id}">
+                <form th:action="@{'/users/' + ${session.user} + '/' + (${follower.isFollowing} ? 'unfollow' : 'follow') + '/' + ${follower.id}}" method="post" class="follow-form">
+                    <button type="submit" th:text="${follower.isFollowing ? '언팔로우' : '팔로우'}"></button>
+                </form>
+            </div>
+        </li>
+    </ul>
+    <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
+</section>
+</body>
+</html>

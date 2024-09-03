@@ -12,8 +12,8 @@
     <p>My page</p>
     <p>name: <span th:text="${user.name}"></span></p>
     <p>email: <span th:text="${user.email}"></span></p>
-    <p>팔로워: <span th:text="${user.followers}"></span></p>
-    <p>팔로잉: <span th:text="${user.followings}"></span></p>
+    <p>팔로워: <a th:href="@{'/users/profile/' + ${user.id} + '/followers'}" th:text="${user.followers}"></a></p>
+    <p>팔로잉: <a th:href="@{'/users/profile/' + ${user.id} + '/followings'}" th:text="${user.followings}"></a></p>
     <p>평가 수: <span th:text="${user.ratingsCount}"></span></p>
     <p>코멘트 수: <span th:text="${user.commentsCount}"></span></p>
     <p>보고싶어요 수: <span th:text="${user.wishCount}"></span></p>
