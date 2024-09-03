@@ -1,5 +1,6 @@
 package com.pedia.movie.user.controller;
 
+import com.pedia.movie.user.dto.UserResponse;
 import com.pedia.movie.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Log4j2
 @Controller
@@ -80,7 +83,7 @@ public class UserController {
 
         int result = userService.login(email, password);
 
-        String nextPage = "redirect:/login";
+        String nextPage = "redirect:/users/login";
 
         switch (result) {
             case UserService.SUCCESS:
@@ -126,7 +129,7 @@ public class UserController {
 
     // 타인 프로필
     @GetMapping("/profile/{id}")
-    public String showProfile(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+    public String showProfile(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes, HttpSession session) {
         model.addAttribute("user", userService.findUserById(id));
         if(userService.findUserById(id) == null) {
             resultType = "fail";
@@ -135,6 +138,13 @@ public class UserController {
             redirectAttributes.addFlashAttribute("message", message);
             return "redirect:/";
         }
+
+        Long currentUserId = (Long) session.getAttribute("user");
+        if (currentUserId != null && !currentUserId.equals(id)) {
+            boolean isFollowing = userService.isFollowing(currentUserId, id);
+            model.addAttribute("isFollowing", isFollowing);
+        }
+
         return "/user/profile";
     }
 
@@ -144,5 +154,43 @@ public class UserController {
         Long userId = (Long) session.getAttribute("user");
         model.addAttribute("user", userService.findUserById(userId));
         return "/user/myPage";
+    }
+
+    // 팔로우
+    @PostMapping("/{followerId}/follow/{followingId}")
+    public String followUser(@PathVariable Long followerId, @PathVariable Long followingId) {
+        userService.followUser(followerId, followingId);
+        return "redirect:/users/profile/" + followingId;
+    }
+
+    // 언팔로우
+    @PostMapping("/{followerId}/unfollow/{followingId}")
+    public String unFollowUser(@PathVariable Long followerId, @PathVariable Long followingId) {
+        userService.unFollowUser(followerId, followingId);
+        return "redirect:/users/profile/" + followingId;
+    }
+
+    @GetMapping("/profile/{id}/followers")
+    public String showFollowers(@PathVariable Long id, Model model, HttpSession session) {
+        List<UserResponse> followers = userService.getFollowers(id);
+        Long currentUserId = (Long) session.getAttribute("user");
+        if (currentUserId != null) {
+            followers.forEach(follower -> follower.setIsFollowing(userService.isFollowing(currentUserId, follower.getId())));
+        }
+        model.addAttribute("followers", followers);
+        model.addAttribute("profileUserId", id);
+        return "/user/followers";
+    }
+
+    @GetMapping("/profile/{id}/followings")
+    public String showFollowings(@PathVariable Long id, Model model, HttpSession session) {
+        List<UserResponse> followings = userService.getFollowings(id);
+        Long currentUserId = (Long) session.getAttribute("user");
+        if (currentUserId != null) {
+            followings.forEach(following -> following.setIsFollowing(userService.isFollowing(currentUserId, following.getId())));
+        }
+        model.addAttribute("followings", followings);
+        model.addAttribute("profileUserId", id);
+        return "/user/followings";
     }
 }

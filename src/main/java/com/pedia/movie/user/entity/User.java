@@ -70,19 +70,19 @@ public class User {
         this.password = password;
     }
 
-    void incrementFollowers() {
+    public void incrementFollowers() {
         this.followers++;
     }
 
-    void decrementFollowers() {
+    public void decrementFollowers() {
         this.followers--;
     }
 
-    void incrementFollowing() {
+    public void incrementFollowings() {
         this.followings++;
     }
 
-    void decrementFollowings() {
+    public void decrementFollowings() {
         this.followings--;
     }
 

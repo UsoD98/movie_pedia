@@ -1,10 +1,15 @@
 package com.pedia.movie.user.service;
 
 import com.pedia.movie.user.dto.UserResponse;
+import com.pedia.movie.user.entity.Follow;
 import com.pedia.movie.user.entity.User;
+import com.pedia.movie.user.repository.FollowRepository;
 import com.pedia.movie.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +21,7 @@ public class UserService {
     final static public int NOT_MATCH = -2;
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
 
     // 회원가입
     public int registerUser(String name, String email, String password) {
@@ -42,7 +48,7 @@ public class UserService {
     public int login(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            return FAIL;
+            return NOT_MATCH;
         }
         if (!user.getPassword().equals(password)) {
             return NOT_MATCH;
@@ -62,5 +68,72 @@ public class UserService {
             return null;
         }
         return UserResponse.from(user);
+    }
+
+    // 유저 팔로우
+    public void followUser(Long followerId, Long followingId) {
+        User follower = userRepository.findById(followerId).orElse(null);
+        User following = userRepository.findById(followingId).orElse(null);
+
+        if (followRepository.findByFollowerAndFollowing(follower, following).isPresent()) {
+            return;
+        }
+
+        Follow follow = new Follow();
+        follow.setFollower(follower);
+        follow.setFollowing(following);
+        followRepository.save(follow);
+
+        assert follower != null;
+        follower.incrementFollowings();
+        assert following != null;
+        following.incrementFollowers();
+
+        userRepository.save(follower);
+        userRepository.save(following);
+    }
+
+    // 유저 언팔로우
+    public void unFollowUser(Long followerId, Long followingId) {
+        User follower = userRepository.findById(followerId).orElse(null);
+        User following = userRepository.findById(followingId).orElse(null);
+
+        Follow follow = followRepository.findByFollowerAndFollowing(follower, following).orElse(null);
+
+        if (follow == null) {
+            return;
+        }
+
+        followRepository.delete(follow);
+
+        assert follower != null;
+        follower.decrementFollowings();
+        assert following != null;
+        following.decrementFollowers();
+
+        userRepository.save(follower);
+        userRepository.save(following);
+    }
+
+    // 팔로우 여부 확인
+    public boolean isFollowing(Long followerId, Long followingId) {
+        User follower = userRepository.findById(followerId).orElse(null);
+        User following = userRepository.findById(followingId).orElse(null);
+        return followRepository.findByFollowerAndFollowing(follower, following).isPresent();
+    }
+
+    // 팔로워 확인
+    public List<UserResponse> getFollowers(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(null);
+        return followRepository.findByFollowing(user).stream()
+                .map(follow -> UserResponse.from(follow.getFollower()))
+                .collect(Collectors.toList());
+    }
+
+    public List<UserResponse> getFollowings(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(null);
+        return followRepository.findByFollower(user).stream()
+                .map(follow -> UserResponse.from(follow.getFollowing()))
+                .collect(Collectors.toList());
     }
 }

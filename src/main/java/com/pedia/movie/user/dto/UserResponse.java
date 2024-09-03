@@ -2,6 +2,7 @@ package com.pedia.movie.user.dto;
 
 import com.pedia.movie.user.entity.User;
 import lombok.Data;
+import lombok.Setter;
 
 @Data
 public class UserResponse {
@@ -16,6 +17,8 @@ public class UserResponse {
     private int wishCount;
     private int watchingCount;
 
+    private boolean isFollowing;
+
     public static UserResponse from(User user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
@@ -29,6 +32,10 @@ public class UserResponse {
         userResponse.setWatchingCount(user.getWatchingCount());
 
         return userResponse;
+    }
+
+    public void setIsFollowing(boolean isFollowing) {
+        this.isFollowing = isFollowing;
     }
 
 }
