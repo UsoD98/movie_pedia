@@ -2,6 +2,8 @@ package com.pedia.movie.movie.service;
 
 import com.pedia.movie.movie.dto.*;
 import com.pedia.movie.movie.entity.Film;
+import com.pedia.movie.movie.entity.FilmImg;
+import com.pedia.movie.movie.repository.FilmImgRepository;
 import com.pedia.movie.movie.repository.FilmRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class FilmService {
 
     private final FilmRepository filmRepository;
+    private final FilmImgRepository filmImgRepository;
 
     private final RestTemplate restTemplate;
 
@@ -120,7 +123,6 @@ public class FilmService {
         return film.map(FilmDetailResponse::from).orElse(null);
     }
 
-
     public List<Film> getUpcomingFilmList(){
         System.out.println(LocalDate.now());
         LocalDate minDate = LocalDate.now().plusDays(1);
@@ -167,4 +169,33 @@ public class FilmService {
         return this.filmRepository.findByTitleContaining(title);
     }
 
+    public List<FilmImg> getFilmDetailImg(Long movieId) {
+        List<FilmImg> filmImgSet = filmImgRepository.findByMovieId(movieId);
+        Film film = filmRepository.findByMovieId(movieId);
+        if(filmImgSet != null && !filmImgSet.isEmpty()){
+            return filmImgSet;
+        }else{
+            String url = "https://api.themoviedb.org/3/movie/" + movieId + "/images?api_key=" + TMDB_API_KEY;
+            FilmImgResponse filmImgResponse = restTemplate.getForObject(url, FilmImgResponse.class);
+            log.info("FilmImgResponse: {}", filmImgResponse);
+
+            //가져온 데이터가 널이 아닐경우
+            if(filmImgResponse != null) {
+                filmImgSet = new ArrayList<FilmImg>();
+                int count = Math.min(filmImgResponse.getBackdrops().size(),10);
+                for (int i = 0; i < count; i++) {
+                    FilmImg filmImg = new FilmImg();
+                    filmImg.setFilePath(filmImgResponse.getBackdrops().get(i).getFilePath());
+                    filmImg.setMovieId(movieId);
+                    filmImg.setWidth(filmImgResponse.getBackdrops().get(i).getWidth());
+                    filmImg.setHeight(filmImgResponse.getBackdrops().get(i).getHeight());
+                    filmImg.setFilm(film);
+                    filmImgRepository.save(filmImg);
+                    filmImgSet.add(filmImg);
+                }
+                return filmImgSet;
+            }
+            return null;
+        }
+    }
 }
