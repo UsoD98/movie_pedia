@@ -105,6 +105,20 @@
             </div>
         </div>
 
+        <!-- 영화 관련 비디오들 출력 -->
+        <div th:if="${film_video}" style="margin-top: 40px;">
+            <h2>관련 비디오</h2>
+            <div>
+                <div th:each="video : ${film_video}">
+                    <h3 th:text="${video.videoName}">비디오 제목</h3>
+                    <iframe th:src="@{'https://www.youtube.com/embed/' + ${video.videoKey}}"
+                            width="560" height="315" frameborder="0" allowfullscreen
+                            style="margin: 10px;"></iframe>
+                </div>
+            </div>
+        </div>
+
+
     </div>
     <div class="container" th:unless="${film != null}">
         <h1>영화 정보를 찾을 수 없습니다.</h1>

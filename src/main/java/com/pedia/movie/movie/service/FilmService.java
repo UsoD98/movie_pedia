@@ -3,12 +3,15 @@ package com.pedia.movie.movie.service;
 import com.pedia.movie.movie.dto.*;
 import com.pedia.movie.movie.entity.Film;
 import com.pedia.movie.movie.entity.FilmImg;
+import com.pedia.movie.movie.entity.FilmVideo;
 import com.pedia.movie.movie.repository.FilmImgRepository;
 import com.pedia.movie.movie.repository.FilmRepository;
+import com.pedia.movie.movie.repository.FilmVideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -19,10 +22,12 @@ import java.util.Optional;
 @Log4j2
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FilmService {
 
     private final FilmRepository filmRepository;
     private final FilmImgRepository filmImgRepository;
+    private final FilmVideoRepository filmVideoRepository;
 
     private final RestTemplate restTemplate;
 
@@ -170,23 +175,22 @@ public class FilmService {
     }
 
     public List<FilmImg> getFilmDetailImg(Long movieId) {
-        List<FilmImg> filmImgSet = filmImgRepository.findByMovieId(movieId);
         Film film = filmRepository.findByMovieId(movieId);
-        if(filmImgSet != null && !filmImgSet.isEmpty()){
+        List<FilmImg> filmImgSet = filmImgRepository.findByFilm(film);
+        if (filmImgSet != null && !filmImgSet.isEmpty()) {
             return filmImgSet;
-        }else{
+        } else {
             String url = "https://api.themoviedb.org/3/movie/" + movieId + "/images?api_key=" + TMDB_API_KEY;
             FilmImgResponse filmImgResponse = restTemplate.getForObject(url, FilmImgResponse.class);
             log.info("FilmImgResponse: {}", filmImgResponse);
 
             //가져온 데이터가 널이 아닐경우
-            if(filmImgResponse != null) {
+            if (filmImgResponse != null) {
                 filmImgSet = new ArrayList<FilmImg>();
-                int count = Math.min(filmImgResponse.getBackdrops().size(),10);
+                int count = Math.min(filmImgResponse.getBackdrops().size(), 10);
                 for (int i = 0; i < count; i++) {
                     FilmImg filmImg = new FilmImg();
                     filmImg.setFilePath(filmImgResponse.getBackdrops().get(i).getFilePath());
-                    filmImg.setMovieId(movieId);
                     filmImg.setWidth(filmImgResponse.getBackdrops().get(i).getWidth());
                     filmImg.setHeight(filmImgResponse.getBackdrops().get(i).getHeight());
                     filmImg.setFilm(film);
@@ -197,5 +201,36 @@ public class FilmService {
             }
             return null;
         }
+
+    }
+        public List<FilmVideo> getFilmDetailVideo(Long movieId) {
+
+            Film film = filmRepository.findByMovieId(movieId);
+            List<FilmVideo> filmVideoSet = filmVideoRepository.findByFilm(film);
+            if(filmVideoSet != null && !filmVideoSet.isEmpty()){
+                return filmVideoSet;
+            }else{
+                String url = "https://api.themoviedb.org/3/movie/"+ movieId +"/videos"+"?api_key=" + TMDB_API_KEY;
+                FilmVideoResponse filmVideoResponse = restTemplate.getForObject(url, FilmVideoResponse.class);
+                log.info("FilmVideoResponse: {}", filmVideoResponse);
+
+                //가져온 데이터가 널이 아닐경우
+                if(filmVideoResponse != null) {
+                    filmVideoSet = new ArrayList<FilmVideo>();
+                    int count = Math.min(filmVideoResponse.getResults().size(),10);
+                    for (int i = 0; i < count; i++) {
+                        FilmVideo filmVideo = new FilmVideo();
+                        filmVideo.setFilm(film);
+                        filmVideo.setVideoKey(filmVideoResponse.getResults().get(i).getKey());
+                        filmVideo.setVideoName(filmVideoResponse.getResults().get(i).getName());
+                        filmVideoRepository.save(filmVideo);
+                        filmVideoSet.add(filmVideo);
+                    }
+                    return filmVideoSet;
+                }
+                return null;
+            }
     }
 }
+
+
