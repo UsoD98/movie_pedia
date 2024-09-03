@@ -23,7 +23,7 @@ public class FilmController {
     private final FilmService filmService;
     private final ObjectMapper objectMapper;
 
-    @GetMapping("/films")
+    @GetMapping(value = {"/", "/films"})
     public String getFilms(Model model) {
         String targetDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.BASIC_ISO_DATE);
         List<Film> dailyBoxOffice = filmService.getDailyBoxOffice(targetDate);
