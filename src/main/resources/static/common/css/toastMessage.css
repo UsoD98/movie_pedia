@@ -19,9 +19,8 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
-
-
-
+section {
+    margin-top: 107px;
 }
 
 #toastMessage {
