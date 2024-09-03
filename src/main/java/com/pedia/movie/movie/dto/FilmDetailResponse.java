@@ -18,6 +18,8 @@ public class FilmDetailResponse {
     private String overview;
     private String backdropPath;
 
+
+
     public static FilmDetailResponse from(Film film) {
 
         FilmDetailResponse filmDetailResponse = new FilmDetailResponse();

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Data
@@ -35,5 +36,9 @@ public class Film {
     private String overview;
 
     private String backdropPath;
+
+    @OneToMany(mappedBy ="film", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FilmImg> filmImgSet;
+
 
 }

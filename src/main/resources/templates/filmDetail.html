@@ -94,6 +94,17 @@
             <strong>줄거리:</strong>
             <p th:text="${film.overview}">영화 줄거리</p>
         </div>
+
+        <!-- 영화 관련 이미지들 출력 -->
+        <div th:if="${film_img}" style="margin-top: 20px;">
+            <h2>관련 이미지</h2>
+            <div>
+                <div th:each="img : ${film_img}">
+                    <img th:src="@{'https://image.tmdb.org/t/p/w500' + ${img.filePath}}" class="film-img" th:alt="${film.title + ' 관련 이미지'}">
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="container" th:unless="${film != null}">
         <h1>영화 정보를 찾을 수 없습니다.</h1>
