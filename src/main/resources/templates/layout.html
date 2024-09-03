@@ -4,31 +4,12 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <title>Layout page</title>
-    <style>
-        #toastMessage {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            z-index: 1000;
-            display: none;
-        }
-
-        .success {
-            background-color: #4CAF50;
-        }
-
-        .fail {
-            background-color: #f44336;
-        }
-    </style>
     <!-- header-css -->
 
     <!-- footer-css -->
+
+    <!-- toastMessage.css -->
+    <link rel="stylesheet" th:href="@{/common/css/toastMessage.css}"/>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script th:src="@{/common/js/toggleFollow.js}"></script>

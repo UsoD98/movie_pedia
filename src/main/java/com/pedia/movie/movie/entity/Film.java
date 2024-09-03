@@ -15,7 +15,7 @@ public class Film {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column
     private Long movieCd;
 
     @Column(unique = true, nullable = false)
