@@ -1,9 +1,6 @@
 package com.pedia.movie.movie.service;
 
-import com.pedia.movie.movie.dto.DailyBoxOfficeResponse;
-import com.pedia.movie.movie.dto.FilmDetailResponse;
-import com.pedia.movie.movie.dto.TMDBResponse;
-import com.pedia.movie.movie.dto.WeeklyBoxOfficeResponse;
+import com.pedia.movie.movie.dto.*;
 import com.pedia.movie.movie.entity.Film;
 import com.pedia.movie.movie.repository.FilmRepository;
 import lombok.RequiredArgsConstructor;
@@ -121,6 +118,53 @@ public class FilmService {
     public FilmDetailResponse getFilmDetail(Long id) {
         Optional<Film> film = filmRepository.findById(id);
         return film.map(FilmDetailResponse::from).orElse(null);
+    }
+
+
+    public List<Film> getUpcomingFilmList(){
+        System.out.println(LocalDate.now());
+        LocalDate minDate = LocalDate.now().plusDays(1);
+        String url = "https://api.themoviedb.org/3/movie/upcoming?api_key=" + TMDB_API_KEY + "&language=ko-KR&page=1&region=kr"
+                + "&release_date.gte=" + minDate;
+        System.out.println(url);
+        UpcomingResponse upcomingResponse = restTemplate.getForObject(url, UpcomingResponse.class);
+        log.info("upcomingResponse: {}", upcomingResponse);
+
+
+        List<Film> films = new ArrayList<>();
+        if(upcomingResponse != null && upcomingResponse.getResults()!=null){
+            //상위 10개의 영화 추출
+            List<UpcomingResponse.Movie> allMovies = upcomingResponse.getResults();
+            int count = Math.min(allMovies.size(), 10); //더 작은 것을 채택
+            int start = 0;
+            while(start < count){
+                Film film = filmRepository.findByMovieId((allMovies.get(start).getId()));
+                log.info("film: {}",film);
+                //만약 데이터 베이스에 없으면
+                if(film == null){
+                    film = new Film();
+                    film.setMovieId(allMovies.get(start).getId());
+                    film.setTitle(allMovies.get(start).getTitle());
+                    film.setReleaseDate(LocalDate.parse(allMovies.get(start).getReleaseDate()));
+                    film.setPosterPath(allMovies.get(start).getPosterPath());
+                    film.setOriginalTitle(allMovies.get(start).getOriginalTitle());
+                    film.setOverview(allMovies.get(start).getOverview());
+                    film.setBackdropPath(allMovies.get(start).getBackdropPath());
+                    filmRepository.save(film);
+                    films.add(film);
+                }else { //데이터베이스에 있으면 그냥 추가
+                    films.add(film);
+                }
+                start ++;
+            }
+
+        }
+        log.info("films: {}", films);
+        return films;
+    }
+
+    public List<Film> searchFilmsByTitle(String title) {
+        return this.filmRepository.findByTitleContaining(title);
     }
 
 }
