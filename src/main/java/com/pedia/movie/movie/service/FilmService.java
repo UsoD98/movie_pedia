@@ -145,6 +145,11 @@ public class FilmService {
             int count = Math.min(allMovies.size(), 10); //더 작은 것을 채택
             int start = 0;
             while(start < count){
+                if(LocalDate.parse(upcomingResponse.getResults().get(start).getReleaseDate()).isBefore(minDate)){
+                    start++;
+                    count++;
+                    continue;
+                }
                 Film film = filmRepository.findByMovieId((allMovies.get(start).getId()));
                 log.info("film: {}",film);
                 //만약 데이터 베이스에 없으면
