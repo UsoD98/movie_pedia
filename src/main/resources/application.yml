@@ -3,3 +3,8 @@ spring:
     import: classpath:secret.yml
   profiles:
     active: local  # 기본 환경 local
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
