@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Films</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .film-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .film-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 15px;
+            width: 300px;
+        }
+
+        .film-poster {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .film-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .film-info {
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        .film-overview {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .film-card a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>공개예정 박스오피스</h1>
+    <div class="film-container">
+        <div th:each="film : ${upcomingFilm}" class="film-card">
+            <a th:href="@{'/films/' + ${film.id}}">
+                <img th:if="${film.posterPath}" th:src="@{'https://image.tmdb.org/t/p/w500' + ${film.posterPath}}"
+                     class="film-poster" alt="영화 포스터">
+                <div class="film-title" th:text="${film.title}">영화 제목</div>
+                <div class="film-info">
+                    <strong>개봉일:</strong> <span
+                        th:text="${#temporals.format(film.releaseDate, 'yyyy-MM-dd')}">개봉일</span>
+                </div>
+                <div class="film-info">
+                    <strong>원제:</strong> <span th:text="${film.originalTitle}">원제</span>
+                </div>
+                <div class="film-overview" th:text="${#strings.abbreviate(film.overview, 100)}">영화 설명</div>
+            </a>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

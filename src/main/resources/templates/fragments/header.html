@@ -10,5 +10,9 @@
         <a th:href="@{/users/register}">Register</a>
         <a th:href="@{/users/login}">Login</a>
     </div>
+    <form action="/films/search" method="get" class="form-inline mb-4">
+        <input type="text" name="title" class="form-control mr-2" placeholder="영화 제목 입력" required>
+        <button type="submit" class="btn btn-primary">검색</button>
+    </form>
 </header>
 </html>
