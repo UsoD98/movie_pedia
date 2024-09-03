@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -64,5 +65,25 @@ public class FilmController {
         }
     }
 
+    @GetMapping("/upcoming_films")
+    public String getUpcomingFilms(Model model){
+        List<Film> upcomingFilmList= filmService.getUpcomingFilmList();
+        System.out.println("here =========================================");
+        try{
+            log.info("Upcoming Film data: {}", objectMapper.writeValueAsString(upcomingFilmList));
+        }catch(Exception e){
+            log.error("Error logging upcoming film data",e);
+        }
+
+        model.addAttribute("upcomingFilm",upcomingFilmList);
+        return "upcoming_films";
+    }
+
+    @GetMapping("/films/search")
+    public String searchFilms(@RequestParam String title, Model model) {
+        List<Film> searchResults = filmService.searchFilmsByTitle(title);
+        model.addAttribute("searchResults", searchResults);
+        return "search_films";
+    }
 
 }
