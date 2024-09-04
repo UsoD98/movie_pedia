@@ -88,6 +88,7 @@ public class RatingService {
     private RatingResponse createRatingResponse(Rating rating) {
         RatingResponse ratingResponse = new RatingResponse();
         ratingResponse.setScore(rating.getScore());
+        ratingResponse.setFilmId(rating.getFilm().getId());
         ratingResponse.setFilmTitle(rating.getFilm().getTitle());
         ratingResponse.setFilmPosterPath(rating.getFilm().getPosterPath());
         return ratingResponse;
