@@ -1,6 +1,7 @@
 package com.pedia.movie.movie.dto;
 
 import com.pedia.movie.movie.entity.Film;
+import com.pedia.movie.user.dto.WishWatchingResponse;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class FilmDetailResponse {
 
     private int ratingCount;
     private double averageRating;
+    private WishWatchingResponse wishWatchingResponse;
 
 
     public static FilmDetailResponse from(Film film) {

@@ -1,6 +1,7 @@
 package com.pedia.movie.movie.entity;
 
 import com.pedia.movie.user.entity.Rating;
+import com.pedia.movie.user.entity.WishWatchList;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -47,6 +48,9 @@ public class Film {
 
     @OneToMany(mappedBy = "film", cascade= CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings;
+
+    @OneToMany(mappedBy = "film", cascade= CascadeType.ALL, orphanRemoval = true)
+    private List<WishWatchList> WishWatchLists;
 
     // 평균 평점 계산 메서드
     public double getAverageRating() {
