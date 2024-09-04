@@ -1,22 +1,105 @@
 <!DOCTYPE html>
-<html
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout.html}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>Login Form</title>
+    <style>
+        .login-form-container {
+            width: 300px;
+            height: 400px;
+            padding: 20px;
+            margin: 0 auto;
+            background-color: white;
+            outline: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+            justify-content: center;
+            align-items: center;
+        }
 
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        span {
+            color: #ff2f6e;
+        }
+
+        #login-submit-button {
+            width: 100%;
+            height: 40px;
+            background-color: #ff2f6e;
+            color: white;
+            cursor: pointer;
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        #login-logo h2,
+        #login-logo h3 {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        #login-forgot-password,
+        #login-signup {
+            font-weight: normal;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #login-forgot-password a,
+        #login-signup a {
+            text-decoration: none;
+            font-weight: 100;
+            color: #ff2f6e;
+        }
+
+        #login-signup {
+            color: #ccc;
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
 <section layout:fragment="content">
-    <p>Login page</p>
-    <form th:action="@{/users/login}" method="post">
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br>
-        <input type="submit" value="로그인">
-    </form>
+    <div id="login-form-wrapper" class="login-form-wrapper">
+        <div id="login-form-container" class="login-form-container">
+            <div id="login-logo" class="login-logo">
+                <h2><span>WATCHA</span>PEDIA</h2>
+                <h3>로그인</h3>
+            </div>
+            <div id="login-input-form">
+                <form id="login-form-box" class="login-form-box" th:action="@{/login}" method="post">
+                    <div id="login-name-input" class="login-input">
+                        <input type="text" placeholder="이름" name="username" required>
+                    </div>
+
+                    <div id="login-pw-input" class="login-input">
+                        <input type="password" placeholder="비밀번호" name="password" required>
+                    </div>
+                    <button id="login-submit-button" type="submit" class="login-button">로그인</button>
+                </form>
+                <div id="login-forgot-password">
+                    <a th:href="@{#}" id="forgot-password-link">비밀번호를 잊어버리셨나요?</a>
+                </div>
+                <div id="login-signup">
+                    <p>계정이 없으신가요? <a th:href="@{/users/register}" id="signup-link">회원가입</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 </body>
 </html>
