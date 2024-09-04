@@ -6,6 +6,7 @@ import lombok.Data;
 public class RatingResponse {
     private double score;
 
+    private Long filmId;
     private String filmTitle;
     private String filmPosterPath;
 
