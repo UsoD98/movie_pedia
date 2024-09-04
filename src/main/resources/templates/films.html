@@ -9,78 +9,162 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: white;
         }
 
-        h1 {
+        #boxoffice-section {
+            margin: 0 10rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+
+            position: relative;
+        }
+
+        #boxoffice-section .section-header {
             color: #333;
-            text-align: center;
+            margin-bottom: 0.7rem;
+            font-size: 1.2rem;
+            font-weight: 800;
         }
 
         .film-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
+
+            transition: transform 0.8s ease-in-out;
+            gap: 1%
         }
 
         .film-card {
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin: 10px;
-            padding: 15px;
-            width: 300px;
+            flex: 0 0 19%
         }
 
         .film-poster {
             width: 100%;
-            height: auto;
+            height: 400px;
+            border: 0.5px solid rgba(0, 0, 0, 0.1);
             border-radius: 4px;
         }
 
         .film-title {
-            font-size: 1.2em;
+            font-size: 1rem;
             font-weight: bold;
-            margin: 10px 0;
+            margin-top: 5px 0;
         }
 
         .film-info {
             font-size: 0.9em;
             margin: 5px 0;
-        }
-
-        .film-overview {
-            font-size: 0.8em;
-            color: #666;
+            color: rgb(56, 56, 56);
         }
 
         .film-card a {
             text-decoration: none;
             color: inherit;
         }
+
+        .film-card span {
+            margin-left: 0.6rem;
+        }
+
+        #boxoffice-section .slider-button-box {
+            position: absolute;
+            display: flex;
+            justify-content: space-between;
+
+            top: 43%;
+            left: 0;
+            right: 0;
+
+            padding-right: 1.7rem;
+            padding-left: 0.8rem;
+        }
+
+        #boxoffice-section button {
+            border-radius: 30%;
+            padding: 0.6rem;
+            padding-top: 0.5rem;
+            font-size: 1rem;
+            background-color: rgb(230, 230, 230, 0.5);
+            color: rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        #boxoffice-section button:hover {
+            background-color: rgb(230, 230, 230);
+            color: rgba(0, 0, 0, 0.9);
+        }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentSlide = 0
+            console.log("currentSlide : " + `${currentSlide}`) // 테스트
+            const container = document.querySelector('.film-container')
+            const cards = document.querySelectorAll('.film-card')
+            const cardsCount = cards.length // 현재 10
+            console.log("cardsCount : " + `${cardsCount}`) // 테스트
+            const visibleCount = 5
+            const totalSlides = Math.ceil(cardsCount/visibleCount) // 현재 2
+            console.log("totalSlides : " + `${totalSlides}`) // 테스트
+
+
+            const prev = document.querySelector('.prev-slide')
+            const next = document.querySelector('.next-slide')
+
+            prev.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--
+                    console.log("currentSlide : " + `${currentSlide}`) // 테스트
+                    slider()
+                }
+            })
+
+            next.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++
+                    console.log("currentSlide : " + `${currentSlide}`) // 테스트
+                    slider()
+                }
+            })
+
+
+            function slider() {
+                const offset = - currentSlide * 100
+                console.log("offset : " +`${offset}`)
+                container.style.transform = `translateX(${offset}%)`
+            }
+
+            slider()
+        })
+    </script>
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>일일 박스오피스</h1>
-    <div class="film-container">
-        <div th:each="film : ${dailyBoxOffice}" class="film-card">
-            <a th:href="@{'/films/' + ${film.id}}">
-                <img th:if="${film.posterPath}" th:src="@{'https://image.tmdb.org/t/p/w500' + ${film.posterPath}}"
-                     class="film-poster" alt="영화 포스터">
-                <div class="film-title" th:text="${film.title}">영화 제목</div>
-                <div class="film-info">
-                    <strong>개봉일:</strong> <span
-                        th:text="${#temporals.format(film.releaseDate, 'yyyy-MM-dd')}">개봉일</span>
-                </div>
-                <div class="film-info">
-                    <strong>원제:</strong> <span th:text="${film.originalTitle}">원제</span>
-                </div>
-                <div class="film-overview" th:text="${#strings.abbreviate(film.overview, 100)}">영화 설명</div>
-            </a>
+    <div id="boxoffice-section">
+        <h1 class="section-header">박스오피스 순위</h1>
+        <div class="film-container">
+            <div th:each="film : ${dailyBoxOffice}" class="film-card">
+                <a th:href="@{'/films/' + ${film.id}}">
+                    <img th:if="${film.posterPath}" th:src="@{'https://image.tmdb.org/t/p/w500' + ${film.posterPath}}"
+                         class="film-poster" alt="영화 포스터">
+                    <div class="film-title" th:text="${film.title}">영화 제목</div>
+                    <div class="film-info">
+                        <strong>개봉</strong> <span
+                            th:text="${#temporals.format(film.releaseDate, 'yyyy-MM-dd')}">개봉일</span>
+                    </div>
+                    <div class="film-info">
+                        <strong>원제</strong> <span th:text="${film.originalTitle}">원제</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="slider-button-box">
+            <button class="prev-slide" type="button">◀</button>
+            <button class="next-slide" type="button">▶</button>
         </div>
     </div>
 </section>
-
 </body>
 </html>
