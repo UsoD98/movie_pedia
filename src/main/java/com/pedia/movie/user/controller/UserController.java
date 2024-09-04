@@ -38,7 +38,7 @@ public class UserController {
 
         int result = userService.registerUser(name, email, password);
 
-        String nextPage = "redirect:/register";
+        String nextPage = "redirect:/users/register";
         switch (result) {
             case UserService.SUCCESS:
                 log.info("회원가입 성공");
