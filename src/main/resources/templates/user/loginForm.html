@@ -20,7 +20,7 @@
             align-items: center;
         }
 
-        input[type="text"],
+        input[type="email"],
         input[type="password"] {
             width: 100%;
             padding: 10px;
@@ -81,11 +81,10 @@
                 <h3>로그인</h3>
             </div>
             <div id="login-input-form">
-                <form id="login-form-box" class="login-form-box" th:action="@{/login}" method="post">
+                <form id="login-form-box" class="login-form-box" th:action="@{/users/login}" method="post">
                     <div id="login-name-input" class="login-input">
-                        <input type="text" placeholder="이름" name="username" required>
+                        <input type="email" placeholder="이름" name="email" required>
                     </div>
-
                     <div id="login-pw-input" class="login-input">
                         <input type="password" placeholder="비밀번호" name="password" required>
                     </div>

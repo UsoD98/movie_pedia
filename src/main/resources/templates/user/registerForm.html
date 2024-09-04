@@ -78,15 +78,15 @@
                 <h3>회원가입</h3>
             </div>
             <div id="register-input-form">
-                <form id="register-form-box" class="register-form-box" th:action="@{/register}" method="post">
+                <form id="register-form-box" class="register-form-box" th:action="@{/users/register}" method="post">
                     <div id="register-name-input" class="register-input">
-                        <input type="text" placeholder="이름" th:name="name" required>
+                        <input type="text" placeholder="이름" name="name" required>
                     </div>
                     <div id="register-email-input" class="register-input">
-                        <input type="email" placeholder="이메일" th:name="email" required>
+                        <input type="email" placeholder="이메일" name="email" required>
                     </div>
                     <div id="register-pw-input" class="register-input">
-                        <input type="password" placeholder="비밀번호" th:name="password" required>
+                        <input type="password" placeholder="비밀번호" name="password" required>
                     </div>
                     <button id="register-submit-button" type="submit" class="register-button">회원가입</button>
                 </form>
