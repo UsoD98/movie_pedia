@@ -1,6 +1,7 @@
 package com.pedia.movie.movie.controller;
-import com.pedia.movie.movie.dto.DailyResponse;
+import com.pedia.movie.movie.dto.DailyAndWeeklyResponse;
 import com.pedia.movie.movie.dto.FilmDetailResponse;
+import com.pedia.movie.movie.dto.UpcomingBoxOfficeResponse;
 import com.pedia.movie.movie.entity.Film;
 import com.pedia.movie.movie.entity.FilmImg;
 import com.pedia.movie.movie.entity.FilmVideo;
@@ -30,9 +31,14 @@ public class FilmController {
     @GetMapping(value = {"/", "/films"})
     public String getFilms(Model model) {
         String targetDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.BASIC_ISO_DATE);
-        List<DailyResponse> dailyBoxOffice = filmService.getDailyBoxOffice(targetDate);
+        List<DailyAndWeeklyResponse> dailyBoxOffice = filmService.getDailyBoxOffice(targetDate);
+        targetDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).format(DateTimeFormatter.BASIC_ISO_DATE);
+        List<DailyAndWeeklyResponse> weeklyBoxOffice = filmService.getWeeklyBoxOffice(targetDate);
+        List<UpcomingBoxOfficeResponse> upcomingFilms = filmService.getUpcomingFilmList();
+
         model.addAttribute("dailyBoxOffice", dailyBoxOffice);
-        log.info(dailyBoxOffice);
+        model.addAttribute("weeklyBoxOffice", weeklyBoxOffice);
+        model.addAttribute("upcomingFilms", upcomingFilms);
 
         return "films";
     }
@@ -40,7 +46,7 @@ public class FilmController {
     @GetMapping("/weekly_films")
     public String getWeekFilms(Model model) {
         String targetDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).format(DateTimeFormatter.BASIC_ISO_DATE);
-        List<Film> weeklyBoxOffice = filmService.getWeeklyBoxOffice(targetDate);
+        List<DailyAndWeeklyResponse> weeklyBoxOffice = filmService.getWeeklyBoxOffice(targetDate);
 
         model.addAttribute("weeklyBoxOffice", weeklyBoxOffice);
 
@@ -65,14 +71,14 @@ public class FilmController {
         }
     }
 
-    @GetMapping("/upcoming_films")
-    public String getUpcomingFilms(Model model){
-        List<Film> upcomingFilmList= filmService.getUpcomingFilmList();
-        System.out.println("here =========================================");
-
-        model.addAttribute("upcomingFilm",upcomingFilmList);
-        return "upcoming_films";
-    }
+//    @GetMapping("/upcoming_films")
+//    public String getUpcomingFilms(Model model){
+//        List<Film> upcomingFilmList= filmService.getUpcomingFilmList();
+//        System.out.println("here =========================================");
+//
+//        model.addAttribute("upcomingFilm",upcomingFilmList);
+//        return "upcoming_films";
+//    }
 
     @GetMapping("/films/search")
     public String searchFilms(@RequestParam String title, Model model) {

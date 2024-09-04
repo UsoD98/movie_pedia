@@ -5,15 +5,13 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class DailyResponse {
+public class UpcomingBoxOfficeResponse {
 
-    private long Id;
-
+    private Long id;
     private String title;
     private String posterPath;
-    private int rank;
-    private int audiAcc; // 누적 관객 수
     private LocalDate releaseDate;
     private double averageRating;
+    private long daysUntil;  // D-day 정보 추가
 
 }
