@@ -32,7 +32,7 @@
             overflow-x: auto;
             scroll-behavior: smooth;
             scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* Internet Explorer 10+ */
+            -ms-overflow-style: none; /* Internet Explorer 10+ */
             gap: 1%;
         }
 
@@ -155,6 +155,36 @@
 </head>
 <body>
 <section layout:fragment="content">
+    <!-- 코멘트 리스트 -->
+    <div class="comments-section" style="display: flex">
+        <div class="comment-container" th:each="comment : ${comments}" style="border: 1px solid black">
+            <div class="user-info">
+                <img src="https://via.placeholder.com/50" class="user-profile-image" alt="Profile Image" width="50"
+                     height="50">
+                <span th:text="${comment.username}" class="username"></span>
+            </div>
+            <a th:href="@{'/films/' + ${comment.filmId}}">
+                <div class="film-info">
+                    <img th:src="@{'https://image.tmdb.org/t/p/w92' + ${comment.filmPosterPath}}"
+                         alt="Movie Poster"
+                         width="50"
+                         height="75">
+                    <div class="film-details">
+                        <h3 th:text="${comment.filmTitle}" class="film-title"></h3>
+                        <p th:text="${comment.content}" class="comment-content"></p>
+                    </div>
+                </div>
+            </a>
+            <div class="rating-info">
+                <span th:text="${#numbers.formatDecimal(comment.ratingScore, 1, 1)}" class="rating-score"></span>
+                <div class="star-rating">
+                    <span th:each="i : ${#numbers.sequence(1, 5)}"
+                          th:class="${i <= comment.ratingScore ? 'star filled' : 'star'}">★</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="boxoffice-section">
         <h1 class="section-header">일일 박스오피스 순위</h1>
         <div class="film-container">
@@ -166,7 +196,7 @@
                     <div class="film-title" th:text="${film.title}">영화 제목</div>
                     <div class="film-info">
                         <!-- 개봉 일자 ( 년도만) -->
-                        <p> <span th:text="${#temporals.format(film.releaseDate, 'yyyy')}">개봉년도</span></p>
+                        <p><span th:text="${#temporals.format(film.releaseDate, 'yyyy')}">개봉년도</span></p>
                         <!-- 별 모양 -->
                         <p>평균 <span>★</span><span th:text="${film.averageRating}">평점</span></p>
                         <!-- 총 관객 수 -->
@@ -191,7 +221,7 @@
                     <div class="film-title" th:text="${film.title}">영화 제목</div>
                     <div class="film-info">
                         <!-- 개봉 일자 ( 년도만) -->
-                        <p> <span th:text="${#temporals.format(film.releaseDate, 'yyyy')}">개봉년도</span></p>
+                        <p><span th:text="${#temporals.format(film.releaseDate, 'yyyy')}">개봉년도</span></p>
                         <!-- 별 모양 -->
                         <p>평균 <span>★</span><span th:text="${film.averageRating}">평점</span></p>
                         <!-- 총 관객 수 -->
@@ -219,7 +249,8 @@
                         <!-- 개봉 일자 -->
                         <p>개봉 예정일: <span th:text="${#temporals.format(film.releaseDate, 'yyyy-MM-dd')}">개봉일</span></p>
                         <!-- 별 모양 -->
-                        <p>평균 <span>★</span><span th:text="${#numbers.formatDecimal(film.averageRating, 1, 1)}">평점</span></p>
+                        <p>평균 <span>★</span><span
+                                th:text="${#numbers.formatDecimal(film.averageRating, 1, 1)}">평점</span></p>
                     </div>
                 </a>
             </div>

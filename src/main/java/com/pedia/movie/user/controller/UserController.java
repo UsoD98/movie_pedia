@@ -1,6 +1,8 @@
 package com.pedia.movie.user.controller;
 
+import com.pedia.movie.user.dto.CommentResponse;
 import com.pedia.movie.user.dto.UserResponse;
+import com.pedia.movie.user.service.CommentService;
 import com.pedia.movie.user.service.RatingService;
 import com.pedia.movie.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +23,7 @@ public class UserController {
 
     private final UserService userService;
     private final RatingService ratingService;
+    private final CommentService commentService;
 
     String resultType;
     String message;
@@ -172,6 +175,7 @@ public class UserController {
         return "redirect:/users/profile/" + followingId;
     }
 
+    // 팔로워 목록
     @GetMapping("/profile/{id}/followers")
     public String showFollowers(@PathVariable Long id, Model model, HttpSession session) {
         List<UserResponse> followers = userService.getFollowers(id);
@@ -184,6 +188,7 @@ public class UserController {
         return "/user/followers";
     }
 
+    // 팔로잉 목록
     @GetMapping("/profile/{id}/followings")
     public String showFollowings(@PathVariable Long id, Model model, HttpSession session) {
         List<UserResponse> followings = userService.getFollowings(id);
@@ -202,5 +207,15 @@ public class UserController {
         model.addAttribute("ratings", ratingService.getRatings(id));
         model.addAttribute("profileUserId", id);
         return "/user/ratings";
+    }
+
+    // 코멘트 내역
+    @GetMapping("/profile/{id}/comments")
+    public String showComments(@PathVariable Long id, Model model, HttpSession session) {
+        List<CommentResponse> comments = commentService.getComments(id);
+
+        model.addAttribute("comments", comments);
+        model.addAttribute("profileUserId", id);
+        return "/user/comments";
     }
 }

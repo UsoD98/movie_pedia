@@ -6,6 +6,8 @@ import com.pedia.movie.movie.entity.Film;
 import com.pedia.movie.movie.entity.FilmImg;
 import com.pedia.movie.movie.entity.FilmVideo;
 import com.pedia.movie.movie.service.FilmService;
+import com.pedia.movie.user.dto.CommentResponse;
+import com.pedia.movie.user.service.CommentService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,6 +29,7 @@ import java.util.List;
 public class FilmController {
 
     private final FilmService filmService;
+    private final CommentService commentService;
 
     @GetMapping(value = {"/", "/films"})
     public String getFilms(Model model) {
@@ -35,10 +38,12 @@ public class FilmController {
         targetDate = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).format(DateTimeFormatter.BASIC_ISO_DATE);
         List<DailyAndWeeklyResponse> weeklyBoxOffice = filmService.getWeeklyBoxOffice(targetDate);
         List<UpcomingBoxOfficeResponse> upcomingFilms = filmService.getUpcomingFilmList();
+        List<CommentResponse> commentLists = commentService.getAllCommentsOrderByDesc();
 
         model.addAttribute("dailyBoxOffice", dailyBoxOffice);
         model.addAttribute("weeklyBoxOffice", weeklyBoxOffice);
         model.addAttribute("upcomingFilms", upcomingFilms);
+        model.addAttribute("comments", commentLists);
 
         return "films";
     }
@@ -61,10 +66,12 @@ public class FilmController {
 
             List<FilmImg> imgList = filmService.getFilmDetailImg(filmDetailResponse.getMovieId());
             List<FilmVideo> videoList = filmService.getFilmDetailVideo(filmDetailResponse.getMovieId());
+            List<CommentResponse> commentList = filmService.getCommentListByFilmId(id);
 
             model.addAttribute("film_img",imgList);
             model.addAttribute("film_video",videoList);
             model.addAttribute("film", filmDetailResponse);
+            model.addAttribute("comments", commentList);
             return "filmDetail";
         } else {
             return "redirect:/films";

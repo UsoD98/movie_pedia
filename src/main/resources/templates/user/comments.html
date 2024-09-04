@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>코멘트</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>코멘트 목록</h1>
+
+    <div th:each="comment : ${comments}" class="comment-item">
+        <div class="film-info">
+            <a th:href="@{'/films/' + ${comment.filmId}}">
+                <img th:src="${'https://image.tmdb.org/t/p/w200' + comment.filmPosterPath}" alt=""/>
+                <h3 th:text="${comment.filmTitle}"></h3>
+            </a>
+        </div>
+        <div class="comment-content">
+            <p th:text="${comment.content}"></p>
+            <p>평점: <span th:text="${comment.ratingScore != null ? comment.ratingScore : '평가 없음'}"></span></p>
+            <p>작성일: <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+        </div>
+    </div>
+
+    <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
+</section>
+</body>
+</html>

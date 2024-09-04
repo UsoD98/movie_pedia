@@ -1,5 +1,6 @@
 package com.pedia.movie.user.service;
 
+import com.pedia.movie.user.dto.CommentResponse;
 import com.pedia.movie.user.dto.UserResponse;
 import com.pedia.movie.user.entity.Follow;
 import com.pedia.movie.user.entity.User;
@@ -22,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final CommentService commentService;
 
     // 회원가입
     public int registerUser(String name, String email, String password) {
@@ -135,5 +137,10 @@ public class UserService {
         return followRepository.findByFollower(user).stream()
                 .map(follow -> UserResponse.from(follow.getFollowing()))
                 .collect(Collectors.toList());
+    }
+
+    // 코멘트 확인
+    public List<CommentResponse> getComments(Long userId) {
+        return commentService.getComments(userId);
     }
 }

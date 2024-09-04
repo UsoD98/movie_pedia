@@ -59,6 +59,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
     // 생성 시간 자동 저장
     @PrePersist
     protected void onCreate() {
@@ -97,7 +100,7 @@ public class User {
         this.ratingsCount--;
     }
 
-    void incrementCommentsCount() {
+    public void incrementCommentsCount() {
         this.commentsCount++;
     }
 

@@ -1,5 +1,6 @@
 package com.pedia.movie.movie.entity;
 
+import com.pedia.movie.user.entity.Comment;
 import com.pedia.movie.user.entity.Rating;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -34,6 +35,7 @@ public class Film {
 
     private String originalTitle;
 
+    // overview는 text 타입으로 변경
     @Column(columnDefinition = "TEXT")
     private String overview;
 
@@ -47,6 +49,9 @@ public class Film {
 
     @OneToMany(mappedBy = "film", cascade= CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings;
+
+    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     // 평균 평점 계산 메서드
     public double getAverageRating() {

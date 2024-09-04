@@ -11,4 +11,5 @@ public interface FilmRepository extends JpaRepository<Film, Long> {
     Film findByMovieId(Long movieId);   //UpcomingFilms
     List<Film> findByTitleContaining(String title); //SearchFilms
 
+    Film findByTitle(String title);
 }
