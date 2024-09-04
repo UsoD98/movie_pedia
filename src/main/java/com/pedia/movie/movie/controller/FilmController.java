@@ -1,4 +1,5 @@
 package com.pedia.movie.movie.controller;
+import com.pedia.movie.movie.dto.DailyResponse;
 import com.pedia.movie.movie.dto.FilmDetailResponse;
 import com.pedia.movie.movie.entity.Film;
 import com.pedia.movie.movie.entity.FilmImg;
@@ -29,9 +30,9 @@ public class FilmController {
     @GetMapping(value = {"/", "/films"})
     public String getFilms(Model model) {
         String targetDate = LocalDate.now().minusDays(1).format(DateTimeFormatter.BASIC_ISO_DATE);
-        List<Film> dailyBoxOffice = filmService.getDailyBoxOffice(targetDate);
-
+        List<DailyResponse> dailyBoxOffice = filmService.getDailyBoxOffice(targetDate);
         model.addAttribute("dailyBoxOffice", dailyBoxOffice);
+        log.info(dailyBoxOffice);
 
         return "films";
     }

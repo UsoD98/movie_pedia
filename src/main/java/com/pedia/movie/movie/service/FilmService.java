@@ -49,14 +49,13 @@ public class FilmService {
     @Value("${tmdb.api.key}")
     private String TMDB_API_KEY;
 
-    public List<Film> getDailyBoxOffice(String targetDate) {
+    public List<DailyResponse> getDailyBoxOffice(String targetDate) {
         String url = KOBIS_API_URL + "?key=" + KOBIS_API_KEY + "&targetDt=" + targetDate;
         DailyBoxOfficeResponse dailyBoxOfficeResponse = restTemplate.getForObject(url, DailyBoxOfficeResponse.class);
         log.info("dailyBoxOfficeResponse: {}", dailyBoxOfficeResponse);
 
-        List<Film> films = new ArrayList<>();
+        List<DailyResponse> dailyResponses = new ArrayList<>();
         if (dailyBoxOfficeResponse != null && dailyBoxOfficeResponse.getBoxOfficeResult() != null) {
-            //daily
             for (DailyBoxOfficeResponse.DailyBoxOfficeMovie dailyBoxOfficeMovie : dailyBoxOfficeResponse.getBoxOfficeResult().getDailyBoxOfficeList()) {
                 Film film = filmRepository.findByMovieCd(Long.parseLong(dailyBoxOfficeMovie.getMovieCd()));
                 log.info("film: {}", film);
@@ -66,14 +65,25 @@ public class FilmService {
                     if (film != null) {
                         film.setMovieCd(Long.parseLong(dailyBoxOfficeMovie.getMovieCd()));
                         filmRepository.save(film);
-//                        log.info("film: {}", film);
                     }
                 }
-                films.add(film);
+
+                if (film != null) {
+                    DailyResponse dailyResponse = new DailyResponse();
+                    dailyResponse.setId(film.getId());
+                    dailyResponse.setTitle(film.getTitle());
+                    dailyResponse.setPosterPath(film.getPosterPath());
+                    dailyResponse.setRank(Integer.parseInt(dailyBoxOfficeMovie.getRank()));
+                    dailyResponse.setAudiAcc(Integer.parseInt(dailyBoxOfficeMovie.getAudiAcc()));
+                    dailyResponse.setReleaseDate(film.getReleaseDate());
+                    dailyResponse.setAverageRating(film.getAverageRating());
+
+                    dailyResponses.add(dailyResponse);
+                }
             }
         }
-        log.info("films: {}", films);
-        return films;
+        log.info("dailyResponses: {}", dailyResponses);
+        return dailyResponses;
     }
 
     public List<Film> getWeeklyBoxOffice(String targetDate) {
