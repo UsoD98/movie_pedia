@@ -7,6 +7,8 @@ import com.pedia.movie.movie.entity.FilmVideo;
 import com.pedia.movie.movie.repository.FilmImgRepository;
 import com.pedia.movie.movie.repository.FilmRepository;
 import com.pedia.movie.movie.repository.FilmVideoRepository;
+import com.pedia.movie.user.entity.Rating;
+import com.pedia.movie.user.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +30,7 @@ public class FilmService {
     private final FilmRepository filmRepository;
     private final FilmImgRepository filmImgRepository;
     private final FilmVideoRepository filmVideoRepository;
+    private final RatingRepository ratingRepository;
 
     private final RestTemplate restTemplate;
 
@@ -123,9 +126,24 @@ public class FilmService {
         return null;
     }
 
-    public FilmDetailResponse getFilmDetail(Long id) {
-        Optional<Film> film = filmRepository.findById(id);
-        return film.map(FilmDetailResponse::from).orElse(null);
+    public FilmDetailResponse getFilmDetail(Long filmId, Long userId) {
+        Film film = filmRepository.findById(filmId).orElse(null);
+        if (film == null) {
+            return null;
+        }
+
+        FilmDetailResponse response = FilmDetailResponse.from(film);
+        response.setRatingCount(film.getRatingCount());
+        response.setAverageRating(film.getAverageRating());
+
+        if (userId != null) {
+            Rating rating = ratingRepository.findByUserIdAndFilmId(userId, filmId);
+            if (rating != null) {
+                response.setUserScore(rating.getScore());
+            }
+        }
+
+        return response;
     }
 
     public List<Film> getUpcomingFilmList(){

@@ -1,6 +1,7 @@
 package com.pedia.movie.user.controller;
 
 import com.pedia.movie.user.dto.UserResponse;
+import com.pedia.movie.user.service.RatingService;
 import com.pedia.movie.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final RatingService ratingService;
 
     String resultType;
     String message;
@@ -192,5 +194,13 @@ public class UserController {
         model.addAttribute("followings", followings);
         model.addAttribute("profileUserId", id);
         return "/user/followings";
+    }
+
+    // 평가 내역
+    @GetMapping("/profile/{id}/ratings")
+    public String showRatings(@PathVariable Long id, Model model) {
+        model.addAttribute("ratings", ratingService.getRatings(id));
+        model.addAttribute("profileUserId", id);
+        return "/user/ratings";
     }
 }
