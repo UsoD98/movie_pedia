@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>평가 내역</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>평가 내역</h1>
+    <div class="ratings-container">
+        <div th:each="rating : ${ratings}" class="rating-item">
+            <img th:src="${'https://image.tmdb.org/t/p/w200' + rating.filmPosterPath}" th:alt="${rating.filmTitle + ' poster'}" class="film-poster">
+            <div class="rating-details">
+                <h3 th:text="${rating.filmTitle}" class="film-title"></h3>
+                <p th:text="${'My Rating: ' + rating.score}" class="rating-score"></p>
+            </div>
+        </div>
+    </div>
+    <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
+</section>
+</body>
+</html>

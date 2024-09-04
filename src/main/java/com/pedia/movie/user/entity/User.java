@@ -56,6 +56,9 @@ public class User {
     @OneToMany(mappedBy = "following")
     private List<Follow> followerUsers;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings;
+
     // 생성 시간 자동 저장
     @PrePersist
     protected void onCreate() {
@@ -86,11 +89,11 @@ public class User {
         this.followings--;
     }
 
-    void incrementRatingsCount() {
+    public void incrementRatingsCount() {
         this.ratingsCount++;
     }
 
-    void decrementRatingsCount() {
+    public void decrementRatingsCount() {
         this.ratingsCount--;
     }
 

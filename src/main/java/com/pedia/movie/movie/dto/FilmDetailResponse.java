@@ -18,6 +18,10 @@ public class FilmDetailResponse {
     private String overview;
     private String backdropPath;
 
+    private double userScore;
+
+    private int ratingCount;
+    private double averageRating;
 
 
     public static FilmDetailResponse from(Film film) {
