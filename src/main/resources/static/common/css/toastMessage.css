@@ -17,6 +17,7 @@ body {
 
 #layout-section {
     margin-top: 107px;
+    min-height: 100vh;
 }
 
 #toastMessage {
