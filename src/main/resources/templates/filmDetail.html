@@ -6,211 +6,515 @@
     <meta charset="UTF-8">
     <title>Film Detail</title>
     <style>
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
 
-        .film-poster {
-            max-width: 300px;
-            height: auto;
-            display: block;
-            margin: 0 auto 20px;
-        }
+        .backdrop-poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: center;
+    width:100vw;
+    height:50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-position-x: center;
+    background-position-y: center;
+    background-size:cover;
+    height: fit-content;
+    }
 
-        .film-backdrop {
-            width: 100%;
-            height: auto;
-            margin-bottom: 20px;
-        }
+.film-backdrop {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지가 요소를 꽉 채우도록 설정 */
+}
 
-        h1 {
-            color: #333;
-            text-align: center;
-        }
+.backdrop-content {
+    position: absolute; /* 텍스트를 이미지 위에 고정 */
+    bottom: 25%; /* 이미지 아래에서 떨어진 위치에 텍스트 배치 */
+    left: 28%; /* 왼쪽에서 떨어진 위치에 텍스트 배치 */
+    color: white; /* 텍스트 색상을 흰색으로 설정 */
+}
 
-        .film-info {
-            margin-bottom: 10px;
-        }
+.title {
+    font-size: 4em;
+    color: white; /* 텍스트 색상을 흰색으로 설정 */
+    margin: 0 0 30px 0; /* 제목과 다른 텍스트 사이의 여백 */
+}
 
-        .film-info strong {
-            color: #555;
-        }
+.release_date,
+.originalTitle {
+    font-size: 1em;
+    margin: 0; /* 텍스트 간격을 최소화 */
+}
 
-        .film-overview {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
 
-        .star-rating {
-            font-size: 0;
-            white-space: nowrap;
-            display: inline-block;
-            width: 250px;
-            height: 50px;
-            overflow: hidden;
-            position: relative;
-            background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjREREREREIiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
-            background-size: 50px 50px;
-        }
-        .star-rating label {
-            opacity: 0;
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            z-index: 1;
-            background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
-            background-size: 50px 50px;
-        }
-        .star-rating input {
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            opacity: 0;
-            display: inline-block;
-            width: 10%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            z-index: 2;
-            position: relative;
-            cursor: pointer;
-        }
-        .star-rating input:hover + label,
-        .star-rating input:checked + label {
-            opacity: 1;
-        }
-        .star-rating input:nth-of-type(1) + label {
-            width: 10%;
-        }
-        .star-rating input:nth-of-type(2) + label {
-            width: 20%;
-        }
-        .star-rating input:nth-of-type(3) + label {
-            width: 30%;
-        }
-        .star-rating input:nth-of-type(4) + label {
-            width: 40%;
-        }
-        .star-rating input:nth-of-type(5) + label {
-            width: 50%;
-        }
-        .star-rating input:nth-of-type(6) + label {
-            width: 60%;
-        }
-        .star-rating input:nth-of-type(7) + label {
-            width: 70%;
-        }
-        .star-rating input:nth-of-type(8) + label {
-            width: 80%;
-        }
-        .star-rating input:nth-of-type(9) + label {
-            width: 90%;
-        }
-        .star-rating input:nth-of-type(10) + label {
-            width: 100%;
-        }
+    .container {
+    max-width: 800px;
+    margin: auto;
+    margin-top: 20px; /* 상단 여백 추가 */
 
-        /*//////////////////////////////////버튼 꾸미기*/
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px; /* 패딩 추가 */
+    height: fit-content;
+}
+.under-backdrop-poster{
+    margin-top:1rem;
+}
+.film-poster {
+    max-width: 300px;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.film-backdrop {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+.toInfo {
+    position: absolute;
+    bottom: 18%; /* 이미지 아래에서 떨어진 위치에 텍스트 배치 */
+    right: 5%; /* 왼쪽에서 떨어진 위치에 텍스트 배치 */
+
+}
+
+.toInfo button {
+    background-color: #ff8a80; /* 연다홍색으로 배경색 설정 */
+    color: white; /* 아이콘 색상을 흰색으로 설정 */
+    border: none; /* 테두리 제거 */
+    border-radius: 50%; /* 버튼을 원형으로 설정 */
+    width: 100px; /* 버튼의 너비 설정 */
+    height: 100px; /* 버튼의 높이 설정 */
+    display: flex; /* 아이콘 중앙 정렬 */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; /* 커서를 포인터로 설정 */
+    transition: transform 0.2s; /* 마우스 호버 시 효과 */
+}
+
+.toInfo button i{
+    font-size: 50px
+}
+
+.toInfo button:hover {
+    transform: scale(1.1); /* 마우스 호버 시 크기 확대 */
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.information-list {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: space-between;
+}
+
+.rating-section {
+    position: relative; /* 위치 조정 */
+    left: -20px; /* 왼쪽으로 이동 */
+    padding: 20px;
+    margin-right: 35px; /* 두 요소 사이의 간격 */
+}
+
+.rating-score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .action-buttons {
-    display: flex; /* Flexbox로 버튼을 수평 배치 */
-    gap: 15px; /* 버튼 사이의 간격 */
-    justify-content: center; /* 버튼을 중앙에 배치 */
-    margin-top: 20px; /* 버튼과 다른 요소 사이의 여백 */
+    display: flex;
+    gap: 10px; /* 버튼 간격 조정 */
+    justify-content: center; /* 가운데 정렬 */
+    margin-top: 20px;
 }
 
-.action-buttons form {
-    margin: 0; /* 폼의 기본 여백 제거 */
+.action-button, .comment-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    border: none;
+    padding: 8px 15px;
+    font-size: 16px; /* 글자 크기 조정 */
+    color: #333333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    text-align: center; /* 텍스트를 가운데 정렬 */
 }
 
-button {
-    background-color: #ffffff; /* 기본 배경색: 흰색 */
-    color: #333333; /* 기본 텍스트 색상: 짙은 회색 */
-    border: 2px solid #cccccc; /* 버튼 테두리 색상 */
-    padding: 12px 25px; /* 버튼의 패딩 */
-    cursor: pointer; /* 커서가 버튼 위에 있을 때 손 모양으로 변경 */
-    font-size: 16px; /* 버튼의 폰트 크기 */
-    border-radius: 8px; /* 버튼의 둥근 모서리 */
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* 색상 및 테두리 색상 변경에 대한 부드러운 전환 효과 */
-    font-weight: bold; /* 버튼 텍스트 두껍게 */
+.action-button i, .comment-button i {
+    font-size: 24px; /* 아이콘 크기 조정 */
+    transition: transform 0.3s ease; /* 부드러운 확대 효과 */
+    margin-bottom: 5px; /* 아이콘과 텍스트 간격 조정 */
 }
 
-button:hover {
-    background-color: #f1f1f1; /* 버튼 호버 시 배경색 */
+.action-button:hover i, .comment-button:hover i {
+    transform: scale(1.5); /* 아이콘 확대 */
 }
 
-button:active {
-    background-color: #e0e0e0; /* 버튼 클릭 시 배경색 */
+.action-button:hover {
+    background-color: #f1f1f1;
+    color: #333333;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .checked-button {
-    background-color: #007bff; /* 선택된 버튼의 배경색: 파란색 */
-    color: #ffffff; /* 선택된 버튼의 텍스트 색상: 흰색 */
-    border-color: #007bff; /* 선택된 버튼의 테두리 색상 */
+    background-color: #ff6f61;
+    color: #ffffff;
 }
-
+/* 체크된 버튼 내 아이콘의 색상 */
+.checked-button i {
+    color: #e04e4e; /* 연다홍색 아이콘 */
+}
 .checked-button:hover {
-    background-color: #0056b3; /* 선택된 버튼 호버 시 배경색 */
+    background-color: #f1f1f1;
 }
 
-.checked-button:active {
-    background-color: #00408d; /* 선택된 버튼 클릭 시 배경색 */
+.comment-button {
+    color: #333333;
+    background-color: #ffffff;
 }
+
+.comment-button:hover {
+    background-color: #f1f1f1;
+}
+
+.film-info {
+    margin-bottom: 10px;
+}
+
+.film-info strong {
+    color: #555;
+}
+
+.film-overview {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.star-rating {
+    font-size: 0;
+    white-space: nowrap;
+    display: inline-block;
+    width: 250px;
+    height: 50px;
+    overflow: hidden;
+    position: relative;
+    background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjREREREREIiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
+    background-size: 50px 50px;
+}
+
+.star-rating label {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 1;
+    background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
+    background-size: 50px 50px;
+}
+
+.star-rating input {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    opacity: 0;
+    display: inline-block;
+    width: 10%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+    position: relative;
+    cursor: pointer;
+}
+
+.star-rating input:hover + label,
+.star-rating input:checked + label {
+    opacity: 1;
+}
+
+.star-rating input:nth-of-type(1) + label {
+    width: 10%;
+}
+
+.star-rating input:nth-of-type(2) + label {
+    width: 20%;
+}
+
+.star-rating input:nth-of-type(3) + label {
+    width: 30%;
+}
+
+.star-rating input:nth-of-type(4) + label {
+    width: 40%;
+}
+
+.star-rating input:nth-of-type(5) + label {
+    width: 50%;
+}
+
+.star-rating input:nth-of-type(6) + label {
+    width: 60%;
+}
+
+.star-rating input:nth-of-type(7) + label {
+    width: 70%;
+}
+
+.star-rating input:nth-of-type(8) + label {
+    width: 80%;
+}
+
+.star-rating input:nth-of-type(9) + label {
+    width: 90%;
+}
+
+.star-rating input:nth-of-type(10) + label {
+    width: 100%;
+}
+
+/* .score 클래스 스타일링 */
+
+
+.score p {
+    margin: 0; /* 기본 여백 제거 */
+    font-size: 18px; /* 기본 폰트 크기 */
+    color: #333; /* 텍스트 색상 */
+}
+
+.score strong {
+    font-size: 24px; /* 강조된 폰트 크기 */
+    display: inline-flex; /* 아이콘과 텍스트를 수평으로 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.score strong i {
+    font-size: 24px; /* 아이콘 크기 조정 */
+}
+
+.score span {
+    font-size: 20px; /* 기본 텍스트 크기 조정 */
+}
+
+<!--        이미지 좌우 넘기기-->
+/* 슬라이드 컨테이너 스타일 */
+
+.slider-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 800px; /* 디자인에 맞게 조정 */
+    margin: auto;
+}
+
+/* 이미지 컨테이너 설정 */
+.film-container {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+/* 각 슬라이드 카드 스타일 */
+.film-card {
+    min-width: 100%;
+    box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
+}
+
+/* 이미지 스타일 */
+.film-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 버튼 박스 스타일 */
+.slider-button-box {
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+/* 좌우 버튼 스타일 */
+.prev, .next {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+   .image-box {
+            overflow: hidden;
+        }
+
+        .video-slider-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 800px; /* Adjust as needed */
+    margin: auto;
+}
+
+.video-film-container {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.video-film-card {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+iframe {
+    width: 100%;
+    height: 400px;
+}
+
+.video-slider-button-box {
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.video-prev, .video-next {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
 <section layout:fragment="content">
     <div class="container" th:if="${film}">
-        <h1 th:text="${film.title}">영화 제목</h1>
-        <!-- 평균 평점 -->
-        <div class="film-info">
-            <strong>평균 평점:</strong> <span th:text="${film.averageRating}">평균 평점</span>
-        </div>
-        <!-- 총 평가 수 -->
-        <div class="film-info">
-            <strong>총 평가 수:</strong> <span th:text="${film.ratingCount}">총 평가 수</span>
-        </div>
-        <!-- 별점 기능 추가 -->
-        <div class="rating-section">
-            <h3>평점 주기</h3>
-            <form id="ratingForm" th:action="@{/films/{filmId}/rating(filmId=${film.id})}" method="post">
-                <div class="star-rating">
-                    <input type="radio" id="star0.5" name="score" value="0.5" th:checked="${film.userScore != null && film.userScore == 0.5}" />
-                    <label for="star0.5" title="0.5점"></label>
-                    <input type="radio" id="star1" name="score" value="1" th:checked="${film.userScore != null && film.userScore == 1}" />
-                    <label for="star1" title="1점"></label>
-                    <input type="radio" id="star1.5" name="score" value="1.5" th:checked="${film.userScore != null && film.userScore == 1.5}" />
-                    <label for="star1.5" title="1.5점"></label>
-                    <input type="radio" id="star2" name="score" value="2" th:checked="${film.userScore != null && film.userScore == 2}" />
-                    <label for="star2" title="2점"></label>
-                    <input type="radio" id="star2.5" name="score" value="2.5" th:checked="${film.userScore != null && film.userScore == 2.5}" />
-                    <label for="star2.5" title="2.5점"></label>
-                    <input type="radio" id="star3" name="score" value="3" th:checked="${film.userScore != null && film.userScore == 3}" />
-                    <label for="star3" title="3점"></label>
-                    <input type="radio" id="star3.5" name="score" value="3.5" th:checked="${film.userScore != null && film.userScore == 3.5}" />
-                    <label for="star3.5" title="3.5점"></label>
-                    <input type="radio" id="star4" name="score" value="4" th:checked="${film.userScore != null && film.userScore == 4}" />
-                    <label for="star4" title="4점"></label>
-                    <input type="radio" id="star4.5" name="score" value="4.5" th:checked="${film.userScore != null && film.userScore == 4.5}" />
-                    <label for="star4.5" title="4.5점"></label>
-                    <input type="radio" id="star5" name="score" value="5" th:checked="${film.userScore != null && film.userScore == 5}" />
-                    <label for="star5" title="5점"></label>
+
+        <div class="backdrop-poster">
+            <img th:if="${film.backdropPath}"
+                 th:src="@{'https://image.tmdb.org/t/p/w780' + ${film.backdropPath}}"
+                 class="film-backdrop" alt="영화 배경">
+            <div class="backdrop-content">
+                <h1 class="title" th:text="${film.title}">영화 제목</h1>
+                <div class="release_date">
+                    <strong>개봉일:</strong> <span th:text="${#temporals.format(film.releaseDate, 'yyyy-MM-dd')}">개봉일</span>
                 </div>
-            </form>
+
+                <div class="originalTitle">
+                    <strong>원제:</strong> <span th:text="${film.originalTitle}">원제</span>
+                </div>
+            </div>
+            <div class="toInfo">
+                <button><i class="fa-solid fa-film"></i></button>
+            </div>
+        </div>
+<div class="under-backdrop-poster">
+
+        <div class="information-list">
+            <!-- 별점 기능 추가 -->
+            <div class="rating-score">
+                <div class="rating-section">
+                    <h3>평점 주기</h3>
+                    <form id="ratingForm" th:action="@{/films/{filmId}/rating(filmId=${film.id})}" method="post">
+                        <div class="star-rating">
+                            <input type="radio" id="star0.5" name="score" value="0.5"
+                                   th:checked="${film.userScore != null && film.userScore == 0.5}"/>
+                            <label for="star0.5" title="0.5점"></label>
+                            <input type="radio" id="star1" name="score" value="1"
+                                   th:checked="${film.userScore != null && film.userScore == 1}"/>
+                            <label for="star1" title="1점"></label>
+                            <input type="radio" id="star1.5" name="score" value="1.5"
+                                   th:checked="${film.userScore != null && film.userScore == 1.5}"/>
+                            <label for="star1.5" title="1.5점"></label>
+                            <input type="radio" id="star2" name="score" value="2"
+                                   th:checked="${film.userScore != null && film.userScore == 2}"/>
+                            <label for="star2" title="2점"></label>
+                            <input type="radio" id="star2.5" name="score" value="2.5"
+                                   th:checked="${film.userScore != null && film.userScore == 2.5}"/>
+                            <label for="star2.5" title="2.5점"></label>
+                            <input type="radio" id="star3" name="score" value="3"
+                                   th:checked="${film.userScore != null && film.userScore == 3}"/>
+                            <label for="star3" title="3점"></label>
+                            <input type="radio" id="star3.5" name="score" value="3.5"
+                                   th:checked="${film.userScore != null && film.userScore == 3.5}"/>
+                            <label for="star3.5" title="3.5점"></label>
+                            <input type="radio" id="star4" name="score" value="4"
+                                   th:checked="${film.userScore != null && film.userScore == 4}"/>
+                            <label for="star4" title="4점"></label>
+                            <input type="radio" id="star4.5" name="score" value="4.5"
+                                   th:checked="${film.userScore != null && film.userScore == 4.5}"/>
+                            <label for="star4.5" title="4.5점"></label>
+                            <input type="radio" id="star5" name="score" value="5"
+                                   th:checked="${film.userScore != null && film.userScore == 5}"/>
+                            <label for="star5" title="5점"></label>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="score">
+                    <!-- 평균 평점 -->
+                    <p>
+                        <strong><i class="fa-solid fa-star"></i></strong> <span th:text="${film.averageRating}">평균 평점</span>
+
+                        <!-- 총 평가 수 -->
+                        <strong> : 총</strong> <span th:text="${film.ratingCount}">총 평가 수</span>
+                    </p>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <!-- "보고싶어요" 버튼 -->
+                <form th:action="@{/films/{filmId}/wish_watching(filmId=${film.id})}" method="post" class="action-form">
+                    <input type="hidden" name="action" value="wish"/>
+                    <button type="submit"
+                            th:classappend="${film.wishWatchingResponse != null and film.wishWatchingResponse.wish} ? 'checked-button' : ''"
+                            class="action-button wish-button">
+                        <i class="fa-solid fa-plus"></i>
+                        보고싶어요
+                    </button>
+                </form>
+
+                <!-- 코멘트 버튼 -->
+                <div class="film-info">
+                    <a th:href="@{/films/{filmId}/comments(filmId=${film.id})}" class="btn comment-button">
+                        <i class="fa-solid fa-pencil"></i>
+                        코멘트
+                    </a>
+                </div>
+
+                <!-- "보고있어요" 버튼 -->
+                <form th:action="@{/films/{filmId}/wish_watching(filmId=${film.id})}" method="post" class="action-form">
+                    <input type="hidden" name="action" value="watching"/>
+                    <button type="submit"
+                            th:classappend="${film.wishWatchingResponse != null and film.wishWatchingResponse.watching} ? 'checked-button' : ''"
+                            class="action-button watching-button">
+                        <i class="fa-regular fa-eye"></i>
+                        보는 중
+                    </button>
+                </form>
+            </div>
         </div>
 
-        <!-- 코멘트 버튼 -->
-        <div class="film-info">
-            <a th:href="@{/films/{filmId}/comments(filmId=${film.id})}" class="btn btn-primary">코멘트</a>        </div>
-
-        <img th:if="${film.backdropPath}"
-             th:src="@{'https://image.tmdb.org/t/p/w500' + ${film.backdropPath}}"
-             class="film-backdrop" alt="영화 배경">
 
         <img th:if="${film.posterPath}"
              th:src="@{'https://image.tmdb.org/t/p/w500' + ${film.posterPath}}"
@@ -224,30 +528,9 @@ button:active {
             <strong>TMDB ID:</strong> <span th:text="${film.movieId}">TMDB ID</span>
         </div>
 
-        <div class="film-info">
-            <strong>개봉일:</strong> <span th:text="${#temporals.format(film.releaseDate, 'yyyy-MM-dd')}">개봉일</span>
-        </div>
-
-        <div class="film-info">
-            <strong>원제:</strong> <span th:text="${film.originalTitle}">원제</span>
-        </div>
 
         <div class="film-info" th:if="${film.originCountry}">
             <strong>국가:</strong> <span th:text="${film.originCountry}">국가</span>
-        </div>
-        <!-- 보고싶어요와 보고있어요 버튼 추가 -->
-        <div class="action-buttons">
-            <!-- "보고싶어요" 버튼 -->
-            <form th:action="@{/films/{filmId}/wish_watching(filmId=${film.id})}" method="post">
-                <input type="hidden" name="action" value="wish" />
-                <button type="submit" th:classappend="${film.wishWatchingResponse != null and film.wishWatchingResponse.wish} ? 'checked-button' : ''">Wish</button>
-            </form>
-
-            <!-- "보고있어요" 버튼 -->
-            <form th:action="@{/films/{filmId}/wish_watching(filmId=${film.id})}" method="post">
-                <input type="hidden" name="action" value="watching" />
-                <button type="submit" th:classappend="${film.wishWatchingResponse != null and film.wishWatchingResponse.watching} ? 'checked-button' : ''">Watching</button>
-            </form>
         </div>
 
         <div class="film-overview">
@@ -270,36 +553,84 @@ button:active {
             </div>
         </div>
 
-        <!-- 영화 관련 이미지들 출력 -->
-        <div th:if="${film_img}" style="margin-top: 20px;">
-            <h2>관련 이미지</h2>
-            <div>
-                <div th:each="img : ${film_img}">
-                    <img th:src="@{'https://image.tmdb.org/t/p/w500' + ${img.filePath}}" class="film-img" th:alt="${film.title + ' 관련 이미지'}">
+        <div class="image-box">
+            <div th:if="${film_img}">
+                <h2>관련 이미지</h2>
+                <div class="slider-container">
+                    <div class="film-container">
+                        <div th:each="img : ${film_img}" class="film-card">
+                            <img th:src="@{'https://image.tmdb.org/t/p/w500' + ${img.filePath}}" class="film-img"
+                                 th:alt="${film.title + ' 관련 이미지'}">
+                        </div>
+                    </div>
+                    <div class="slider-button-box">
+                        <button class="prev">◀</button>
+                        <button class="next">▶</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-<!--        &lt;!&ndash; 영화 관련 비디오들 출력 &ndash;&gt;-->
-<!--        <div th:if="${film_video}" style="margin-top: 40px;">-->
-<!--            <h2>관련 비디오</h2>-->
-<!--            <div>-->
-<!--                <div th:each="video : ${film_video}">-->
-<!--                    <h3 th:text="${video.videoName}">비디오 제목</h3>-->
-<!--                    <iframe th:src="@{'https://www.youtube.com/embed/' + ${video.videoKey}}"-->
-<!--                            width="560" height="315" frameborder="0" allowfullscreen-->
-<!--                            style="margin: 10px;"></iframe>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+<div class="video-box">
+    <div th:if="${film_video}" style="margin-top: 40px;">
+        <h2>관련 비디오</h2>
+        <div class="video-slider-container">
+            <div class="video-film-container">
+                <div th:each="video : ${film_video}" class="video-film-card">
+                    <h3 th:text="${video.videoName}">비디오 제목</h3>
+                    <iframe th:src="@{'https://www.youtube.com/embed/' + ${video.videoKey}}"
+                            width="560" height="315" frameborder="0" allowfullscreen
+                            style="margin: 10px;"></iframe>
+                </div>
+            </div>
+            <div class="video-slider-button-box">
+                <button class="video-prev">◀</button>
+                <button class="video-next">▶</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
+</div>
     </div>
     <div class="container" th:unless="${film != null}">
         <h1>영화 정보를 찾을 수 없습니다.</h1>
     </div>
 
     <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+    const prevButton = document.querySelector('.prev');
+    const nextButton = document.querySelector('.next');
+    const filmContainer = document.querySelector('.film-container');
+    const filmCards = document.querySelectorAll('.film-card');
+    const totalSlides = filmCards.length;
+    let currentIndex = 0;
+
+    function updateSliderPosition() {
+        const offset = -currentIndex * 100;
+        filmContainer.style.transform = `translateX(${offset}%)`;
+    }
+
+    prevButton.addEventListener('click', function() {
+        console.log("prevButton");
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSliderPosition();
+        }
+    });
+
+    nextButton.addEventListener('click', function() {
+        console.log("nextButton");
+        if (currentIndex < totalSlides - 1) {
+            currentIndex++;
+            updateSliderPosition();
+        }
+    });
+});
+
+
+
         document.addEventListener('DOMContentLoaded', function() {
             const ratingForm = document.getElementById('ratingForm');
             let ratingInputs = ratingForm.querySelectorAll('input[name="score"]');
@@ -317,6 +648,61 @@ button:active {
                 });
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+    var backdrop = document.querySelector('.backdrop-poster');
+    var underBackdrop = document.querySelector('.under-backdrop-poster');
+
+    function updateMargin() {
+        var backdropHeight = backdrop.offsetHeight;
+        underBackdrop.style.marginTop = (backdropHeight - 100) + 'px';
+    }
+
+    updateMargin();
+
+    window.addEventListener('resize', updateMargin);
+});
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const toInfoButton = document.querySelector('.toInfo button');
+
+        toInfoButton.addEventListener('click', function () {
+            const underBackdrop = document.querySelector('.under-backdrop-poster');
+            const offset = underBackdrop.offsetTop - 90; // 50px 위쪽으로 이동 (원하는 만큼 조정 가능)
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const prevButton = document.querySelector('.video-prev');
+        const nextButton = document.querySelector('.video-next');
+        const filmContainer = document.querySelector('.video-film-container');
+        const filmCards = document.querySelectorAll('.video-film-card');
+        const totalSlides = filmCards.length;
+        let currentIndex = 0;
+
+        function updateSliderPosition() {
+            const offset = -currentIndex * 100;
+            filmContainer.style.transform = `translateX(${offset}%)`;
+        }
+
+        prevButton.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSliderPosition();
+            }
+        });
+
+        nextButton.addEventListener('click', function() {
+            if (currentIndex < totalSlides - 1) {
+                currentIndex++;
+                updateSliderPosition();
+            }
+        });
+    });
+    </script>
+
     </script>
 </section>
 
