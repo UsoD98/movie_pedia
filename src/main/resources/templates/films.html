@@ -6,22 +6,29 @@
     <meta charset="UTF-8">
     <title>Films</title>
     <style>
-        .boxoffice-section {
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: white;
+        }
+
+        .slider-section {
             margin: 0 10rem;
+            margin-bottom: 4rem;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             position: relative;
         }
 
-        .boxoffice-section .section-header {
+        .section-header {
             color: #333;
             margin-bottom: 0.7rem;
             font-size: 1.2rem;
             font-weight: 800;
         }
 
-        .film-container {
+        .slider-container {
             display: flex;
             overflow-x: auto;
             scroll-behavior: smooth;
@@ -30,7 +37,7 @@
             gap: 1%;
         }
 
-        .film-container::-webkit-scrollbar { /* WebKit */
+        .slider-container::-webkit-scrollbar { /* WebKit */
             width: 0;
             height: 0;
         }
@@ -69,7 +76,7 @@
             margin-left: 0.6rem;
         }
 
-        .boxoffice-section .slider-button-box {
+        .slider-button-box {
             position: absolute;
             display: flex;
             justify-content: space-between;
@@ -82,7 +89,11 @@
             padding-left: 0.8rem;
         }
 
-        .boxoffice-section button {
+        #comment-section .slider-button-box {
+            top: 50%;
+        }
+
+        .prev,.next {
             border-radius: 30%;
             padding: 0.6rem;
             padding-top: 0.5rem;
@@ -114,16 +125,79 @@
         .slider-button-box button:hover {
             background-color: #e0e0e0;
         }
+
+        /* 코멘트 섹션 */
+        /* 코멘트 카드 */
+        .comment-card {
+            display: flex;
+            flex-direction: column;
+            flex: 0 0 32.333%;
+
+            padding: 0.7rem;
+            border: 0.8px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /* 코멘트 타이틀 */
+        .comment-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 프로필 사진, 이름 */
+        .user-name-container{
+            display: flex;
+        }
+
+        .user-name-container > img {
+            border-radius: 50%;
+        }
+
+        .user-name-container > span {
+            margin-left: 5px;
+            margin-top: 2px;
+        }
+
+        /* 별점 */
+        .rating-info {
+            display: flex;
+        }
+
+        .rating-info > span {
+            margin-top: 5px;
+            margin-right: 3px;
+        }
+
+        /* 코멘트 박스 */
+        .comment-inner > a {
+            display: flex;
+        }
+
+        .comment-inner img {
+            border-radius: 5px;
+        }
+
+        .film-details {
+            margin-left: 0.5rem;
+            color: #000000;
+        }
+
+        .film-details > p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const boxOfficeSections = document.querySelectorAll('.boxoffice-section');
+            const sliderSections = document.querySelectorAll('.slider-section');
 
-            boxOfficeSections.forEach(section => {
-                const container = section.querySelector('.film-container');
+            sliderSections.forEach(section => {
+                const container = section.querySelector('.slider-container');
                 const prevButton = section.querySelector('.prev');
                 const nextButton = section.querySelector('.next');
-                const cardWidth = container.querySelector('.film-card').offsetWidth;
+                const cardWidth = container.querySelector('.slider-card').offsetWidth;
                 const containerWidth = container.offsetWidth;
                 const maxScroll = container.scrollWidth - containerWidth;
                 let currentScroll = 0;
@@ -150,39 +224,48 @@
 <body>
 <section layout:fragment="content">
     <!-- 코멘트 리스트 -->
-    <div class="comments-section" style="display: flex">
-        <div class="comment-container" th:each="comment : ${comments}" style="border: 1px solid black">
-            <div class="user-info">
-                <img src="https://via.placeholder.com/50" class="user-profile-image" alt="Profile Image" width="50"
-                     height="50">
-                <span th:text="${comment.username}" class="username"></span>
-            </div>
-            <a th:href="@{'/films/' + ${comment.filmId}}">
-                <div class="film-info">
-                    <img th:src="@{'https://image.tmdb.org/t/p/w92' + ${comment.filmPosterPath}}"
-                         alt="Movie Poster"
-                         width="50"
-                         height="75">
-                    <div class="film-details">
-                        <h3 th:text="${comment.filmTitle}" class="film-title"></h3>
-                        <p th:text="${comment.content}" class="comment-content"></p>
+    <div id="comment-section" class="slider-section">
+        <h1 class="section-header">지금 뜨는 코멘트</h1>
+        <div class="comment-container slider-container">
+            <div class="comment-card slider-card" th:each="comment : ${comments}">
+                <div class="comment-title">
+                    <div class="user-name-container">
+                        <img src="https://via.placeholder.com/20" class="user-profile-image" alt="Profile Image">
+                        <span th:text="${comment.username}" class="username"></span>
+                    </div>
+                    <div class="rating-info">
+                        <div class="star-rating">
+                            <span th:each="i : ${#numbers.sequence(1, 1)}"
+                                  th:class="${i <= comment.ratingScore ? 'star filled' : 'star'}">★</span>
+                        </div>
+                        <span th:text="${#numbers.formatDecimal(comment.ratingScore, 1, 1)}" class="rating-score"></span>
                     </div>
                 </div>
-            </a>
-            <div class="rating-info">
-                <span th:text="${#numbers.formatDecimal(comment.ratingScore, 1, 1)}" class="rating-score"></span>
-                <div class="star-rating">
-                    <span th:each="i : ${#numbers.sequence(1, 5)}"
-                          th:class="${i <= comment.ratingScore ? 'star filled' : 'star'}">★</span>
+                <div class="comment-inner">
+                    <a th:href="@{'/films/' + ${comment.filmId}}">
+                        <img th:src="@{'https://image.tmdb.org/t/p/w92' + ${comment.filmPosterPath}}"
+                             alt="Movie Poster"
+                             width="57"
+                             height="84">
+                        <div class="film-details">
+                            <h3 th:text="${comment.filmTitle}" class="film-title"></h3>
+                            <p th:text="${comment.content}" class="comment-content"></p>
+                        </div>
+                    </a>
                 </div>
             </div>
+        </div>
+        <div class="slider-button-box">
+            <button class="prev">◀</button>
+            <button class="next">▶</button>
         </div>
     </div>
 
-    <div class="boxoffice-section">
+    <!-- 영화 리스트 -->
+    <div class="slider-section boxoffice-section">
         <h1 class="section-header">일일 박스오피스 순위</h1>
-        <div class="film-container">
-            <div th:each="film : ${dailyBoxOffice}" class="film-card">
+        <div class="film-container slider-container">
+            <div th:each="film : ${dailyBoxOffice}" class="film-card slider-card">
                 <p th:text="${film.rank}">등수</p>
                 <a th:href="@{'/films/' + ${film.id}}">
                     <img th:if="${film.posterPath}" th:src="@{'https://image.tmdb.org/t/p/w500' + ${film.posterPath}}"
@@ -204,10 +287,11 @@
             <button class="next">▶</button>
         </div>
     </div>
-    <div class="boxoffice-section">
+
+    <div class="slider-section boxoffice-section">
         <h1 class="section-header">주간 박스오피스 순위</h1>
-        <div class="film-container">
-            <div th:each="film : ${weeklyBoxOffice}" class="film-card">
+        <div class="film-container slider-container">
+            <div th:each="film : ${weeklyBoxOffice}" class="film-card slider-card">
                 <p th:text="${film.rank}">등수</p>
                 <a th:href="@{'/films/' + ${film.id}}">
                     <img th:if="${film.posterPath}" th:src="@{'https://image.tmdb.org/t/p/w500' + ${film.posterPath}}"
@@ -229,10 +313,10 @@
             <button class="next">▶</button>
         </div>
     </div>
-    <div class="boxoffice-section">
+    <div class="slider-section boxoffice-section">
         <h1 class="section-header">공개 예정작</h1>
-        <div class="film-container">
-            <div th:each="film : ${upcomingFilms}" class="film-card">
+        <div class="film-container slider-container">
+            <div th:each="film : ${upcomingFilms}" class="film-card slider-card">
                 <!-- 개봉날짜와 오늘 날짜의 차이를 D-day로 표시 -->
                 <p th:text="${film.daysUntil == 0 ? '오늘 개봉' : 'D-' + film.daysUntil}">D-day</p>
                 <a th:href="@{'/films/' + ${film.id}}">
