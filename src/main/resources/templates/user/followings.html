@@ -5,25 +5,143 @@
 <head>
     <meta charset="UTF-8">
     <title>팔로잉</title>
+    <style>
+        /* 헤더 */
+        .follow-header-container {
+            border-bottom: 1px solid rgb(230, 230, 230);
+
+            position: fixed;
+            top: 0;
+            z-index: 9999;
+            width: 100%;
+            margin-top: 72px;
+            background-color: white;
+        }
+
+        .follow-header {
+            margin: 0 1rem;
+        }
+
+        .follow-header > div {
+            padding-top: 1rem;
+        }
+
+        .follow-header a {
+            color: #FF0558;
+            font-weight: 600;
+        }
+
+        .follow-header h1 {
+            padding: 0.5rem 0;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* 섹션 */
+        .follow-section-container {
+            margin: 1.5rem 0;
+            margin-top: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .follow-list {
+            display: flex;
+            flex-direction: column;
+            padding: 0
+        }
+
+        .follow-content {
+            display: flex;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgb(230, 230, 230);
+            height: 104px;
+        }
+
+        .follow-content:last-child {
+            border-bottom: 0;
+        }
+
+        .follow-content a {
+            display: flex;
+            padding-right: 15rem;
+        }
+
+        .follow-content img {
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        /* 사용자 정보 (이름, 평가 등등) */
+        .follow-info-container {
+            padding: 1rem 0;
+        }
+
+        .follow-user-name {
+            color: rgb(0, 0, 0);
+            font-weight: 600;
+            font-size: 1.0rem;
+        }
+
+        .follow-info-container div {
+            width: 200px;
+            font-size: 0.90rem;
+            color: #666;
+        }
+
+        .self-introduce {
+            display: none;
+        }
+
+        /* 버튼 */
+        .follow-button {
+            margin: 2rem 0;
+            padding: 5px 9px;
+            border-radius: 15px;
+            border: 0.1px solid rgb(0, 0, 0, 0.1);
+            background-color: white;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .follow-button:hover {
+            background-color: rgb(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>팔로잉</h1>
-    <ul>
-        <li th:each="following : ${followings}">
-            <a th:href="@{'/users/profile/' + ${following.id}}">
-                <img src="https://via.placeholder.com/50" alt="Profile Image" width="50" height="50">
-                <span th:text="${following.name}"></span>
-                <span th:text="'평가 ' + ${following.ratingsCount} + ' · 코멘트 ' + ${following.commentsCount}"></span>
-            </a>
-            <div th:if="${session.user != null and session.user != following.id}">
-                <form th:action="@{'/users/' + ${session.user} + '/' + (${following.isFollowing} ? 'unfollow' : 'follow') + '/' + ${following.id}}" method="post" class="follow-form">
-                    <button type="submit" th:text="${following.isFollowing ? '언팔로우' : '팔로우'}"></button>
-                </form>
+    <div class="follow-header-container">
+        <div class="follow-header">
+            <div>
+                <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
             </div>
-        </li>
-    </ul>
-    <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
+            <h1>팔로잉</h1>
+        </div>
+    </div>
+    <div class="follow-section-container">
+        <ul id="follower-list" class="follow-list">
+            <!-- 진짜 리스트 -->
+            <li class="follow-content" th:each="following : ${followings}">
+                <a th:href="@{'/users/profile/' + ${following.id}}">
+                    <img src="https://via.placeholder.com/71" alt="프로필 사진">
+                    <div class="follow-info-container">
+                        <span class="follow-user-name" th:text="${following.name}"></span>
+                        <div>
+                            <span th:text="'평가 ' + ${following.ratingsCount} + ' · 코멘트 ' + ${following.commentsCount}"></span>
+                        </div>
+                    </div>
+                </a>
+                <!-- 팔로우 버튼 (팔로잉에서 디폴트: 언팔로우) -->
+                <div th:if="${session.user != null and session.user != following.id}">
+                    <form th:action="@{'/users/' + ${session.user} + '/' + (${following.isFollowing} ? 'unfollow' : 'follow') + '/' + ${following.id}}" method="post" class="follow-form">
+                        <button class="follow-button" type="submit" th:text="${following.isFollowing ? '팔로잉' : '팔로우'}"></button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
 </section>
 </body>
 </html>
