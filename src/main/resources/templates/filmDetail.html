@@ -56,26 +56,76 @@
             border-radius: 5px;
         }
 
-        .rating {
+        .star-rating {
+            font-size: 0;
+            white-space: nowrap;
             display: inline-block;
+            width: 250px;
+            height: 50px;
+            overflow: hidden;
+            position: relative;
+            background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjREREREREIiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
+            background-size: 50px 50px;
         }
-        .rating input {
-            display: none;
+        .star-rating label {
+            opacity: 0;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            z-index: 1;
+            background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
+            background-size: 50px 50px;
         }
-        .rating label {
-            float: right;
+        .star-rating input {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            opacity: 0;
+            display: inline-block;
+            width: 10%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            z-index: 2;
+            position: relative;
             cursor: pointer;
-            color: #ccc;
         }
-        .rating label:before {
-            content: '\2605';
-            font-size: 30px;
+        .star-rating input:hover + label,
+        .star-rating input:checked + label {
+            opacity: 1;
         }
-        .rating input:checked ~ label {
-            color: #ffca08;
+        .star-rating input:nth-of-type(1) + label {
+            width: 10%;
+        }
+        .star-rating input:nth-of-type(2) + label {
+            width: 20%;
+        }
+        .star-rating input:nth-of-type(3) + label {
+            width: 30%;
+        }
+        .star-rating input:nth-of-type(4) + label {
+            width: 40%;
+        }
+        .star-rating input:nth-of-type(5) + label {
+            width: 50%;
+        }
+        .star-rating input:nth-of-type(6) + label {
+            width: 60%;
+        }
+        .star-rating input:nth-of-type(7) + label {
+            width: 70%;
+        }
+        .star-rating input:nth-of-type(8) + label {
+            width: 80%;
+        }
+        .star-rating input:nth-of-type(9) + label {
+            width: 90%;
+        }
+        .star-rating input:nth-of-type(10) + label {
+            width: 100%;
         }
 
-        //////////////////////////////////버튼 꾸미기
+        /*//////////////////////////////////버튼 꾸미기*/
 .action-buttons {
     display: flex; /* Flexbox로 버튼을 수평 배치 */
     gap: 15px; /* 버튼 사이의 간격 */
@@ -120,9 +170,6 @@ button:active {
 .checked-button:active {
     background-color: #00408d; /* 선택된 버튼 클릭 시 배경색 */
 }
-        ///////////////////////////////////
-
-
     </style>
 </head>
 <body>
@@ -141,27 +188,27 @@ button:active {
         <div class="rating-section">
             <h3>평점 주기</h3>
             <form id="ratingForm" th:action="@{/films/{filmId}/rating(filmId=${film.id})}" method="post">
-                <div class="rating">
-                    <input type="radio" id="star5" name="score" value="5" th:checked="${film.userScore != null && film.userScore == 5}" />
-                    <label for="star5" title="5점"></label>
-                    <input type="radio" id="star4.5" name="score" value="4.5" th:checked="${film.userScore != null && film.userScore == 4.5}" />
-                    <label for="star4.5" title="4.5점"></label>
-                    <input type="radio" id="star4" name="score" value="4" th:checked="${film.userScore != null && film.userScore == 4}" />
-                    <label for="star4" title="4점"></label>
-                    <input type="radio" id="star3.5" name="score" value="3.5" th:checked="${film.userScore != null && film.userScore == 3.5}" />
-                    <label for="star3.5" title="3.5점"></label>
-                    <input type="radio" id="star3" name="score" value="3" th:checked="${film.userScore != null && film.userScore == 3}" />
-                    <label for="star3" title="3점"></label>
-                    <input type="radio" id="star2.5" name="score" value="2.5" th:checked="${film.userScore != null && film.userScore == 2.5}" />
-                    <label for="star2.5" title="2.5점"></label>
-                    <input type="radio" id="star2" name="score" value="2" th:checked="${film.userScore != null && film.userScore == 2}" />
-                    <label for="star2" title="2점"></label>
-                    <input type="radio" id="star1.5" name="score" value="1.5" th:checked="${film.userScore != null && film.userScore == 1.5}" />
-                    <label for="star1.5" title="1.5점"></label>
-                    <input type="radio" id="star1" name="score" value="1" th:checked="${film.userScore != null && film.userScore == 1}" />
-                    <label for="star1" title="1점"></label>
+                <div class="star-rating">
                     <input type="radio" id="star0.5" name="score" value="0.5" th:checked="${film.userScore != null && film.userScore == 0.5}" />
                     <label for="star0.5" title="0.5점"></label>
+                    <input type="radio" id="star1" name="score" value="1" th:checked="${film.userScore != null && film.userScore == 1}" />
+                    <label for="star1" title="1점"></label>
+                    <input type="radio" id="star1.5" name="score" value="1.5" th:checked="${film.userScore != null && film.userScore == 1.5}" />
+                    <label for="star1.5" title="1.5점"></label>
+                    <input type="radio" id="star2" name="score" value="2" th:checked="${film.userScore != null && film.userScore == 2}" />
+                    <label for="star2" title="2점"></label>
+                    <input type="radio" id="star2.5" name="score" value="2.5" th:checked="${film.userScore != null && film.userScore == 2.5}" />
+                    <label for="star2.5" title="2.5점"></label>
+                    <input type="radio" id="star3" name="score" value="3" th:checked="${film.userScore != null && film.userScore == 3}" />
+                    <label for="star3" title="3점"></label>
+                    <input type="radio" id="star3.5" name="score" value="3.5" th:checked="${film.userScore != null && film.userScore == 3.5}" />
+                    <label for="star3.5" title="3.5점"></label>
+                    <input type="radio" id="star4" name="score" value="4" th:checked="${film.userScore != null && film.userScore == 4}" />
+                    <label for="star4" title="4점"></label>
+                    <input type="radio" id="star4.5" name="score" value="4.5" th:checked="${film.userScore != null && film.userScore == 4.5}" />
+                    <label for="star4.5" title="4.5점"></label>
+                    <input type="radio" id="star5" name="score" value="5" th:checked="${film.userScore != null && film.userScore == 5}" />
+                    <label for="star5" title="5점"></label>
                 </div>
             </form>
         </div>
