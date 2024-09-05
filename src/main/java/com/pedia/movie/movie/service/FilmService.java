@@ -7,9 +7,12 @@ import com.pedia.movie.movie.entity.FilmVideo;
 import com.pedia.movie.movie.repository.FilmImgRepository;
 import com.pedia.movie.movie.repository.FilmRepository;
 import com.pedia.movie.movie.repository.FilmVideoRepository;
+import com.pedia.movie.user.dto.WishWatchingResponse;
 import com.pedia.movie.user.dto.CommentResponse;
 import com.pedia.movie.user.entity.Rating;
+import com.pedia.movie.user.entity.WishWatchList;
 import com.pedia.movie.user.repository.RatingRepository;
+import com.pedia.movie.user.repository.WishWatchRepository;
 import com.pedia.movie.user.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,8 +36,8 @@ public class FilmService {
     private final FilmImgRepository filmImgRepository;
     private final FilmVideoRepository filmVideoRepository;
     private final RatingRepository ratingRepository;
+    private final WishWatchRepository wishWatchRepository;
     private final CommentService commentService;
-
     private final RestTemplate restTemplate;
 
     @Value("${kobis.api.url}")
@@ -149,8 +152,15 @@ public class FilmService {
 
         if (userId != null) {
             Rating rating = ratingRepository.findByUserIdAndFilmId(userId, filmId);
+            WishWatchList wishWatchList = wishWatchRepository.findByUserIdAndFilmId(userId, filmId);
             if (rating != null) {
                 response.setUserScore(rating.getScore());
+            }
+            if (wishWatchList != null) {
+                WishWatchingResponse wishWatchingResponse = new WishWatchingResponse();
+                wishWatchingResponse.setWish(wishWatchList.isWish());
+                wishWatchingResponse.setWatching(wishWatchList.isWatch());
+                response.setWishWatchingResponse(wishWatchingResponse);
             }
         }
 

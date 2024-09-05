@@ -72,6 +72,7 @@ public class FilmController {
             model.addAttribute("film_video",videoList);
             model.addAttribute("film", filmDetailResponse);
             model.addAttribute("comments", commentList);
+          
             return "filmDetail";
         } else {
             return "redirect:/films";
