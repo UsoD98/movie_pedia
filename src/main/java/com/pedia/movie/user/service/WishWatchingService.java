@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class WishWatchingService {
@@ -31,9 +35,11 @@ public class WishWatchingService {
             if(action.equals("wish")){
                 wishWatchList.setWish(true);
                 wishWatchList.setWatch(false);
+                user.incrementWishCount();
             }else {
                 wishWatchList.setWish(false);
                 wishWatchList.setWatch(true);
+                user.incrementWatchingCount();
 
             }
             wishWatchList.setUser(user);
@@ -44,19 +50,24 @@ public class WishWatchingService {
             if(action.equals("wish")){
                 if(wishWatchList.isWish()){
                     wishWatchRepository.delete(wishWatchList);
+                    user.decrementWishCount();
                     return null;
                 }else{
                     wishWatchList.setWish(true);
                     wishWatchList.setWatch(false);
+                    user.incrementWishCount();
+                    user.decrementWatchingCount();
                 }
             }else{
                 if(wishWatchList.isWatch()){
                     wishWatchRepository.delete(wishWatchList);
+                    user.decrementWatchingCount();
                     return null;
                 }else{
                     wishWatchList.setWish(false);
                     wishWatchList.setWatch(true);
-
+                    user.decrementWishCount();
+                    user.incrementWatchingCount();
                 }
             }
 
@@ -65,5 +76,48 @@ public class WishWatchingService {
         wishWatchingResponse.setWish(wishWatchList.isWish());
         wishWatchingResponse.setWatching(wishWatchList.isWatch());
         return wishWatchingResponse;
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<WishWatchingResponse> showWishWatchingResponse(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        List<WishWatchList> wishWatchLists = wishWatchRepository.findAllByUserId(userId);
+
+        return wishWatchLists.stream()
+                .map(this::createWishWatchingResponse)
+                .collect(Collectors.toList());
+    }
+
+    private WishWatchingResponse createWishWatchingResponse(WishWatchList watchList ) {
+
+        WishWatchingResponse wishWatchingResponse = new WishWatchingResponse();
+        wishWatchingResponse.setFilmId(watchList.getFilm().getId());
+        wishWatchingResponse.setFilmTitle(watchList.getFilm().getTitle());
+        wishWatchingResponse.setWish(watchList.isWish());
+        wishWatchingResponse.setWatching(watchList.isWatch());
+        wishWatchingResponse.setFilmPosterPath(watchList.getFilm().getPosterPath());
+
+        return wishWatchingResponse;
+    }
+
+    public List<WishWatchingResponse> getWishResponse(Long id) {
+        List<WishWatchingResponse> wishWatchingResponses = new ArrayList<>();
+        for(WishWatchingResponse wishWatchingResponse : showWishWatchingResponse(id)){
+            if(wishWatchingResponse.isWish()){
+                wishWatchingResponses.add(wishWatchingResponse);
+            }
+        }
+        return wishWatchingResponses;
+    }
+
+    public List<WishWatchingResponse> getWatchingResponse(Long id) {
+        List<WishWatchingResponse> wishWatchingResponses = new ArrayList<>();
+        for(WishWatchingResponse wishWatchingResponse : showWishWatchingResponse(id)){
+            if(wishWatchingResponse.isWatching()){
+                wishWatchingResponses.add(wishWatchingResponse);
+            }
+        }
+        return wishWatchingResponses;
     }
 }

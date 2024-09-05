@@ -9,4 +9,10 @@ public class WishWatchingResponse {
 
     private boolean watching;
 
+    private Long filmId;
+
+    private String filmTitle;
+
+    private String filmPosterPath;
+
 }

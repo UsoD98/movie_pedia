@@ -2,9 +2,11 @@ package com.pedia.movie.user.controller;
 
 import com.pedia.movie.user.dto.CommentResponse;
 import com.pedia.movie.user.dto.UserResponse;
+import com.pedia.movie.user.dto.WishWatchingResponse;
 import com.pedia.movie.user.service.CommentService;
 import com.pedia.movie.user.service.RatingService;
 import com.pedia.movie.user.service.UserService;
+import com.pedia.movie.user.service.WishWatchingService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +26,7 @@ public class UserController {
     private final UserService userService;
     private final RatingService ratingService;
     private final CommentService commentService;
+    private final WishWatchingService wishWatchingService;
 
     String resultType;
     String message;
@@ -217,5 +220,25 @@ public class UserController {
         model.addAttribute("comments", comments);
         model.addAttribute("profileUserId", id);
         return "/user/comments";
+    }
+
+    // 위시리스트 내역
+    @GetMapping("/profile/{id}/wish")
+    public String showWish(@PathVariable Long id, Model model) {
+        List<WishWatchingResponse> wishWatchingResponses = wishWatchingService.getWishResponse(id);
+
+        model.addAttribute("wishwatchs", wishWatchingResponses);
+        model.addAttribute("profileUserId", id);
+        return "/user/wish";
+    }
+
+    // 보는 중 리스트 내역
+    @GetMapping("/profile/{id}/watching")
+    public String showWatching(@PathVariable Long id, Model model) {
+        List<WishWatchingResponse> wishWatchingResponses = wishWatchingService.getWatchingResponse(id);
+
+        model.addAttribute("wishwatchs", wishWatchingResponses);
+        model.addAttribute("profileUserId", id);
+        return "/user/watching";
     }
 }
