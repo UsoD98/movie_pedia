@@ -165,14 +165,14 @@ public class UserController {
     @PostMapping("/{followerId}/follow/{followingId}")
     public String followUser(@PathVariable Long followerId, @PathVariable Long followingId) {
         userService.followUser(followerId, followingId);
-        return "redirect:/users/profile/" + followingId;
+        return "redirect:/users/profile/" + followerId;
     }
 
     // 언팔로우
     @PostMapping("/{followerId}/unfollow/{followingId}")
     public String unFollowUser(@PathVariable Long followerId, @PathVariable Long followingId) {
         userService.unFollowUser(followerId, followingId);
-        return "redirect:/users/profile/" + followingId;
+        return "redirect:/users/profile/" + followerId;
     }
 
     // 팔로워 목록
