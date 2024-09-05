@@ -14,7 +14,7 @@
     <p>팔로워: <a th:href="@{'/users/profile/' + ${user.id} + '/followers'}" th:text="${user.followers}"></a></p>
     <p>팔로잉: <a th:href="@{'/users/profile/' + ${user.id} + '/followings'}" th:text="${user.followings}"></a></p>
     <p>평가 수: <a th:href="@{'/users/profile/' + ${user.id} + '/ratings'}" th:text="${user.ratingsCount}"></a></p>
-    <p>코멘트 수: <span th:text="${user.commentsCount}"></span></p>
+    <p>코멘트 수: <a th:href="@{'/users/profile/' + ${user.id} + '/comments'}" th:text="${user.commentsCount}"></a></p>
     <p>보고싶어요 수: <span th:text="${user.wishCount}"></span></p>
     <p>보고있어요 수: <span th:text="${user.watchingCount}"></span></p>
 

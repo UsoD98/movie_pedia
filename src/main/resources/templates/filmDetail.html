@@ -166,6 +166,10 @@ button:active {
             </form>
         </div>
 
+        <!-- 코멘트 버튼 -->
+        <div class="film-info">
+            <a th:href="@{/films/{filmId}/comments(filmId=${film.id})}" class="btn btn-primary">코멘트</a>        </div>
+
         <img th:if="${film.backdropPath}"
              th:src="@{'https://image.tmdb.org/t/p/w500' + ${film.backdropPath}}"
              class="film-backdrop" alt="영화 배경">
@@ -211,6 +215,21 @@ button:active {
         <div class="film-overview">
             <strong>줄거리:</strong>
             <p th:text="${film.overview}">영화 줄거리</p>
+        </div>
+
+        <!-- 코멘트 출력 -->
+        <div th:if="${comments}" style="margin-top: 20px;">
+            <h2>코멘트</h2>
+            <div>
+                <div th:each="comment : ${comments}">
+                    <div>
+                        <strong th:text="${comment.username}">사용자 이름</strong>
+                        <span th:text="${comment.content}">코멘트 내용</span>
+                        <!-- 평점 -->
+                        <span th:if="${comment.ratingScore}">★: <span th:text="${comment.ratingScore}">평점</span></span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- 영화 관련 이미지들 출력 -->

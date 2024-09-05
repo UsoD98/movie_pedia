@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment Form</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <h1>Comment Form</h1>
+        <form th:action="@{/films/{filmId}/comments(filmId=${comment.filmId})}" method="post">
+            <div class="form-group">
+                <label for="content">Comment</label>
+                <textarea class="form-control" id="content" name="content" rows="3" th:text="${comment.content}"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

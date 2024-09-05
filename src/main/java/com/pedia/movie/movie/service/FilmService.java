@@ -8,10 +8,12 @@ import com.pedia.movie.movie.repository.FilmImgRepository;
 import com.pedia.movie.movie.repository.FilmRepository;
 import com.pedia.movie.movie.repository.FilmVideoRepository;
 import com.pedia.movie.user.dto.WishWatchingResponse;
+import com.pedia.movie.user.dto.CommentResponse;
 import com.pedia.movie.user.entity.Rating;
 import com.pedia.movie.user.entity.WishWatchList;
 import com.pedia.movie.user.repository.RatingRepository;
 import com.pedia.movie.user.repository.WishWatchRepository;
+import com.pedia.movie.user.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +37,7 @@ public class FilmService {
     private final FilmVideoRepository filmVideoRepository;
     private final RatingRepository ratingRepository;
     private final WishWatchRepository wishWatchRepository;
-
+    private final CommentService commentService;
     private final RestTemplate restTemplate;
 
     @Value("${kobis.api.url}")
@@ -53,6 +55,7 @@ public class FilmService {
     @Value("${tmdb.api.key}")
     private String TMDB_API_KEY;
 
+    @Transactional
     public List<DailyAndWeeklyResponse> getDailyBoxOffice(String targetDate) {
         String url = KOBIS_API_URL + "?key=" + KOBIS_API_KEY + "&targetDt=" + targetDate;
         DailyBoxOfficeResponse dailyBoxOfficeResponse = restTemplate.getForObject(url, DailyBoxOfficeResponse.class);
@@ -61,16 +64,9 @@ public class FilmService {
         List<DailyAndWeeklyResponse> dailyResponses = new ArrayList<>();
         if (dailyBoxOfficeResponse != null && dailyBoxOfficeResponse.getBoxOfficeResult() != null) {
             for (DailyBoxOfficeResponse.DailyBoxOfficeMovie dailyBoxOfficeMovie : dailyBoxOfficeResponse.getBoxOfficeResult().getDailyBoxOfficeList()) {
-                Film film = filmRepository.findByMovieCd(Long.parseLong(dailyBoxOfficeMovie.getMovieCd()));
+                Long movieCd = Long.parseLong(dailyBoxOfficeMovie.getMovieCd());
+                Film film = getOrCreateFilm(movieCd, dailyBoxOfficeMovie.getMovieNm(), null);
                 log.info("film: {}", film);
-                if (film == null) {
-                    log.info("film is null");
-                    film = getMovieFromTMDB(dailyBoxOfficeMovie.getMovieNm());
-                    if (film != null) {
-                        film.setMovieCd(Long.parseLong(dailyBoxOfficeMovie.getMovieCd()));
-                        filmRepository.save(film);
-                    }
-                }
 
                 if (film != null) {
                     DailyAndWeeklyResponse dailyAndWeeklyResponse = new DailyAndWeeklyResponse();
@@ -90,6 +86,7 @@ public class FilmService {
         return dailyResponses;
     }
 
+    @Transactional
     public List<DailyAndWeeklyResponse> getWeeklyBoxOffice(String targetDate) {
         String url = KOBIS_API_WEEK_URL + "?key=" + KOBIS_API_KEY + "&targetDt=" + targetDate;
         System.out.println(url);
@@ -98,19 +95,10 @@ public class FilmService {
 
         List<DailyAndWeeklyResponse> weeklyResponses = new ArrayList<>();
         if (weeklyBoxOfficeResponse != null && weeklyBoxOfficeResponse.getBoxOfficeResult() != null) {
-            //daily
             for (WeeklyBoxOfficeResponse.WeeklyBoxOfficeMovie weeklyBoxOfficeMovie : weeklyBoxOfficeResponse.getBoxOfficeResult().getWeeklyBoxOfficeList()) {
-                Film film = filmRepository.findByMovieCd(Long.parseLong(weeklyBoxOfficeMovie.getMovieCd()));
+                Long movieCd = Long.parseLong(weeklyBoxOfficeMovie.getMovieCd());
+                Film film = getOrCreateFilm(movieCd, weeklyBoxOfficeMovie.getMovieNm(), null);
                 log.info("film: {}", film);
-                if (film == null) {
-                    log.info("film is null");
-                    film = getMovieFromTMDB(weeklyBoxOfficeMovie.getMovieNm());
-                    if (film != null) {
-                        film.setMovieCd(Long.parseLong(weeklyBoxOfficeMovie.getMovieCd()));
-                        filmRepository.save(film);
-//                        log.info("film: {}", film);
-                    }
-                }
 
                 if (film != null) {
                     DailyAndWeeklyResponse dailyAndWeeklyResponse = new DailyAndWeeklyResponse();
@@ -179,8 +167,8 @@ public class FilmService {
         return response;
     }
 
-    public List<UpcomingBoxOfficeResponse> getUpcomingFilmList(){
-        System.out.println(LocalDate.now());
+    @Transactional
+    public List<UpcomingBoxOfficeResponse> getUpcomingFilmList() {
         LocalDate minDate = LocalDate.now().plusDays(1);
         String url = "https://api.themoviedb.org/3/movie/upcoming?api_key=" + TMDB_API_KEY + "&language=ko-KR&page=1&region=kr"
                 + "&release_date.gte=" + minDate;
@@ -188,47 +176,34 @@ public class FilmService {
         UpcomingResponse upcomingResponse = restTemplate.getForObject(url, UpcomingResponse.class);
         log.info("upcomingResponse: {}", upcomingResponse);
 
-
         List<UpcomingBoxOfficeResponse> films = new ArrayList<>();
-        if(upcomingResponse != null && upcomingResponse.getResults()!=null){
-            //상위 10개의 영화 추출
+        if(upcomingResponse != null && upcomingResponse.getResults() != null) {
             List<UpcomingResponse.Movie> allMovies = upcomingResponse.getResults();
-            int count = Math.min(allMovies.size(), 10); //더 작은 것을 채택
+            int count = Math.min(allMovies.size(), 10);
             int start = 0;
             LocalDate today = LocalDate.now();
-            while(start < count){
+            while(start < count) {
                 UpcomingResponse.Movie movie = allMovies.get(start);
                 LocalDate releaseDate = LocalDate.parse(movie.getReleaseDate());
-                if(releaseDate.isBefore(minDate)){
+                if(releaseDate.isBefore(minDate)) {
                     start++;
                     count++;
                     continue;
                 }
-                Film film = filmRepository.findByMovieId(movie.getId());
-                if(film == null){
-                    film = new Film();
-                    film.setMovieId(movie.getId());
-                    film.setTitle(movie.getTitle());
-                    film.setReleaseDate(releaseDate);
-                    film.setPosterPath(movie.getPosterPath());
-                    film.setOriginalTitle(movie.getOriginalTitle());
-                    film.setOverview(movie.getOverview());
-                    film.setBackdropPath(movie.getBackdropPath());
-                    filmRepository.save(film);
+                Film film = getOrCreateFilm(null, movie.getTitle(), movie.getId());
+                if(film != null) {
+                    UpcomingBoxOfficeResponse upcomingBoxOfficeResponse = new UpcomingBoxOfficeResponse();
+                    upcomingBoxOfficeResponse.setId(film.getId());
+                    upcomingBoxOfficeResponse.setTitle(film.getTitle());
+                    upcomingBoxOfficeResponse.setPosterPath(film.getPosterPath());
+                    upcomingBoxOfficeResponse.setReleaseDate(film.getReleaseDate());
+                    upcomingBoxOfficeResponse.setAverageRating(film.getAverageRating());
+
+                    long daysUntil = ChronoUnit.DAYS.between(today, releaseDate);
+                    upcomingBoxOfficeResponse.setDaysUntil(daysUntil);
+
+                    films.add(upcomingBoxOfficeResponse);
                 }
-
-                UpcomingBoxOfficeResponse upcomingBoxOfficeResponse = new UpcomingBoxOfficeResponse();
-                upcomingBoxOfficeResponse.setId(film.getId());
-                upcomingBoxOfficeResponse.setTitle(film.getTitle());
-                upcomingBoxOfficeResponse.setPosterPath(film.getPosterPath());
-                upcomingBoxOfficeResponse.setReleaseDate(film.getReleaseDate());
-                upcomingBoxOfficeResponse.setAverageRating(film.getAverageRating());
-
-                // D-day 계산
-                long daysUntil = ChronoUnit.DAYS.between(today, releaseDate);
-                upcomingBoxOfficeResponse.setDaysUntil(daysUntil);
-
-                films.add(upcomingBoxOfficeResponse);
                 start++;
             }
         }
@@ -296,6 +271,50 @@ public class FilmService {
                 }
                 return null;
             }
+    }
+
+    private Film getOrCreateFilm(Long movieCd, String title, Long movieId) {
+        Film film = null;
+
+        if (movieCd != null) {
+            film = filmRepository.findByMovieCd(movieCd);
+        }
+
+        if (film == null && movieId != null) {
+            film = filmRepository.findByMovieId(movieId);
+        }
+
+        if (film == null) {
+            film = filmRepository.findByTitle(title);
+        }
+
+        if (film == null) {
+            film = getMovieFromTMDB(title);
+            if (film != null) {
+                if (movieCd != null) film.setMovieCd(movieCd);
+                if (movieId != null) film.setMovieId(movieId);
+                filmRepository.save(film);
+            }
+        } else {
+            boolean updated = false;
+            if (movieCd != null && film.getMovieCd() == null) {
+                film.setMovieCd(movieCd);
+                updated = true;
+            }
+            if (movieId != null && film.getMovieId() == null) {
+                film.setMovieId(movieId);
+                updated = true;
+            }
+            if (updated) {
+                filmRepository.save(film);
+            }
+        }
+
+        return film;
+    }
+
+    public List<CommentResponse> getCommentListByFilmId(Long id) {
+        return commentService.getCommentsByFilmId(id);
     }
 }
 
