@@ -15,8 +15,14 @@ body {
     width: 100%;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 #layout-section {
     margin-top: 107px;
+    min-height: 100vh;
 }
 
 #toastMessage {

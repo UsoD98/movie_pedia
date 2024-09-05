@@ -8,6 +8,7 @@ import com.pedia.movie.user.repository.FollowRepository;
 import com.pedia.movie.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class UserService {
     private final CommentService commentService;
 
     // 회원가입
+    @Transactional
     public int registerUser(String name, String email, String password) {
 
         // 이메일 중복검사
@@ -47,6 +49,7 @@ public class UserService {
     }
 
     // 로그인
+    @Transactional
     public int login(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
@@ -59,11 +62,13 @@ public class UserService {
     }
 
     // 로그인 성공 시 유저 정보 가져오기
+    @Transactional
     public Long findIdByEmail(String email) {
         return userRepository.findIdByEmail(email);
     }
 
     // 유저 정보 가져오기
+    @Transactional
     public UserResponse findUserById(Long id) {
         User user = userRepository.findById(id).orElse(null);
         if (user == null) {
@@ -73,6 +78,7 @@ public class UserService {
     }
 
     // 유저 팔로우
+    @Transactional
     public void followUser(Long followerId, Long followingId) {
         User follower = userRepository.findById(followerId).orElse(null);
         User following = userRepository.findById(followingId).orElse(null);
@@ -96,6 +102,7 @@ public class UserService {
     }
 
     // 유저 언팔로우
+    @Transactional
     public void unFollowUser(Long followerId, Long followingId) {
         User follower = userRepository.findById(followerId).orElse(null);
         User following = userRepository.findById(followingId).orElse(null);
@@ -125,6 +132,7 @@ public class UserService {
     }
 
     // 팔로워 확인
+    @Transactional
     public List<UserResponse> getFollowers(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(null);
         return followRepository.findByFollowing(user).stream()
@@ -132,6 +140,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public List<UserResponse> getFollowings(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(null);
         return followRepository.findByFollower(user).stream()

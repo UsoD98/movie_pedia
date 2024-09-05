@@ -4,27 +4,398 @@
         layout:decorate="~{layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
+    <title>Login Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
+    <style>
+        div {
+            display: block;
+            unicode-bidi: isolate;
+        }
+
+        li {
+            list-style-type: none;
+            color: grey;
+        }
+
+        img {
+            border: 0;
+        }
+
+        .mp-section-top {
+            margin: 0 0 -82.5px;
+            margin-top: 100px;
+            padding-top: calc(11.25% + 32px);
+            background-color: white;
+            background-repeat: no-repeat;
+            background-position: center;
+
+        }
+
+        .mp-section {
+            width: 663px;
+
+            background-color: white;
+            position: relative;
+            margin:0 auto;
+            border-radius:5px;
+            align-items:center;
+            justify-content:center;
+            padding-bottom:20px;
+
+        }
+
+
+        .mp-section-top i {
+            position: absolute;
+            margin-right:10px;
+            top: 0;
+            right: 3px;
+            margin:0;
+            font-size: 24px;
+            color: black;
+        }
+
+        .mp-section-top .fa-gear {
+            color: black;
+        }
+
+        .mp-section-top .fa-user {
+            position: absolute;
+            top: -10px;
+            left: -40px;
+            width: 140px;
+            height: 140px;
+            margin: 50px;
+            border: 1px solid #f2f2f2;
+            background-color: #f2f2f2;
+            font-size: 90px;
+            border-radius: 50%;
+            display:flex;
+            text-align: center;
+            color: lightgrey;
+            align-items: center;
+            justify-content: center;
+
+        }
+        #storage{
+        margin:0 auto;
+            border-radius:5px;
+            }
+        .mp-user-info {
+            margin-top: 160px;
+
+        }
+
+        #user-profile {
+             margin-left:20px;
+        }
+
+        .user-email {
+            color: gray;
+        }
+
+        #user-following {
+            display: flex;
+           margin-left:20px;
+        }
+
+        #user-following a {
+            color: gray;
+        }
+
+        #user-following a,
+        #user-follow a {
+            display: flex;
+            text-align: center;
+            color: black;
+        }
+
+        #user-following strong {
+            margin-left: 3px;
+            margin-right: 5px;
+        }
+
+        .user-redline {
+            margin-top: 10px;
+            font-size: 15px;
+            line-height: 22px;
+            color: #f2f2f2;
+            word-break: break-all;
+        }
+
+        .mp-review-wrapper {
+            display: flex;
+            justify-content: space-evenly;
+
+
+        }
+
+        .user-evolution,
+        .user-comment,
+        .user-collection {
+            display: grid;
+            grid-template-rows: auto auto;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        #user-following a {
+            text-decoration: none;
+            color: black;
+            max-width:58px;
+        }
+
+        .user-follower::before,
+        .user-follow::before {
+            content: attr(data-text);
+            color: gray;
+        }
+
+        .user-follower::before {
+            content: "팔로워";
+            margin-right: 5px;
+        }
+
+        .user-follow::before {
+            content: "| 팔로잉";
+
+        }
+
+        .user-follower strong,
+        .user-follow strong {
+            color: black;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .user-e-number,
+        .user-c-number,
+        .user-co-number {
+            font-weight: bold;
+            color: black;
+            font-size: 20px;
+        }
+
+        .user-e-message,
+        .user-c-message,
+        .user-co-message {
+            color: gray;
+            font-size: 14px;
+        }
+
+        .evolution-line {
+            width: 1px;
+            height: 20px;
+            background-color: gray;
+            margin: 0 10px;
+        }
+
+        .storage {
+            align-items: center;
+
+            width: 663px;
+            height: 250px;
+            background-color: white;
+            position: relative;
+        }
+
+        .storage-h {
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            height: 51px;
+            padding: 19px 15px 9px;
+            font-size: 21px;
+            font-weight: bold;
+            line-height: 27px;
+            color: #292a32;
+        }
+
+        #mp-bi-bi {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 140px;
+            height: 140px;
+            margin: 50px;
+            border: 1px solid #f2f2f2;
+            background-color: #f2f2f2;
+            font-size: 90px;
+            border-radius: 50%;
+            text-align: center;
+            color: lightgrey;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            margin-top: 30px;
+            line-height: 140%;
+        }
+
+        .storage-h {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            margin-bottom: 50px;
+        }
+
+        #storage {
+            top: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            gap: 20px;
+            height: 200px;
+
+        }
+
+        .circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mp-movie i {
+            font-size: 30px;
+            color: grey;
+        }
+
+        .mp-movie-comment {
+            text-align: center;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .event-p {
+            margin-top: 20px;
+            width: 663px;
+            height: 250px;
+            background-color: white;
+            position: relative;
+        }
+
+    #follunfoll button {
+        background-color: black; /* 버튼 배경색을 검은색으로 설정 */
+        color: white; /* 글씨 색상을 흰색으로 설정 */
+        border: none; /* 버튼의 기본 테두리를 제거 */
+        padding: 0px 20px; /* 버튼의 상하 및 좌우 패딩 설정 */
+        font-size: 16px; /* 버튼 글씨 크기 설정 */
+        cursor: pointer; /* 버튼 위에 마우스를 올렸을 때 커서가 포인터로 변경 */
+        border-radius: 5px; /* 버튼의 모서리를 둥글게 설정 */
+        width: 1050%; /* 버튼을 가로로 길게 설정 (부모 요소의 너비에 맞춤) */
+        position:relative;
+        left:-50px;
+    }
+
+    .follow-button:hover {
+        background-color: #333; /* 버튼에 마우스를 올렸을 때 배경색을 조금 더 어둡게 설정 */
+    }
+    </style>
 </head>
 <body>
 <section layout:fragment="content">
-    <p>Profile</p>
-    <p>name: <span th:text="${user.name}"></span></p>
-    <p>팔로워: <a th:href="@{'/users/profile/' + ${user.id} + '/followers'}" th:text="${user.followers}"></a></p>
-    <p>팔로잉: <a th:href="@{'/users/profile/' + ${user.id} + '/followings'}" th:text="${user.followings}"></a></p>
-    <p>평가 수: <a th:href="@{'/users/profile/' + ${user.id} + '/ratings'}" th:text="${user.ratingsCount}"></a></p>
-    <p>코멘트 수: <a th:href="@{'/users/profile/' + ${user.id} + '/comments'}" th:text="${user.commentsCount}"></a></p>
-    <p>보고싶어요 수: <span th:text="${user.wishCount}"></span></p>
-    <p>보고있어요 수: <span th:text="${user.watchingCount}"></span></p>
 
-    <!-- 현재 로그인한 사용자와 프로필 사용자가 다른 경우에만 버튼을 표시 -->
-    <div th:if="${session.user != null and session.user != user.id}">
-        <!-- 팔로우 상태에 따라 버튼 텍스트와 동작 변경 -->
-        <form th:action="@{'/users/' + ${session.user} + '/' + (${isFollowing} ? 'unfollow' : 'follow') + '/' + ${user.id}}" method="post">
-            <button type="submit" th:text="${isFollowing ? '언팔로우' : '팔로우'}"></button>
-        </form>
+    <div  id="white-box" style="background-color: #f2f2f2; min-height: 100vw">
+        <div id="mp-section-wrapper" class="mp-section-wrapper">
+            <div id="mp-section" class="mp-section">
+                <div class="mp-section-top" style="padding-top: calc(11.25% + 32px);">
+                    <i class="fa-duotone fa-solid fa-gear" style="margin-right:10px;"></i>
+                    <i id="user2" class="fa-solid fa-user"></i>
+                </div>
+                <div id="mp-user-info" class="mp-user-info">
+                </div>
+                <div id="user-profile">
+                    <h1 class="user-name" th:text="${user.name}"></h1>
+                    <!--                <p>name: <span th:text="${user.name}"></span></p>-->
+<!--                    <p class="user-email" th:text="${user.email}"></p>-->
+                    <!--                <p>email: <span th:text="${user.email}"></span></p>-->
+
+                </div>
+                <div id="user-following">
+                    <a class="user-follower" th:href="@{'/users/profile/' + ${user.id} + '/followers'}">
+                        <strong th:text="${user.followers}"></strong>
+                    </a>
+                    <a class="user-follow" <a th:href="@{'/users/profile/' + ${user.id} + '/followings'}">
+                    <strong th:text="${user.followings}"></strong>
+                    <p class="user-redline"></p>
+                    <!------------------------------------------------------------>
+                    <!-- 현재 로그인한 사용자와 프로필 사용자가 다른 경우에만 버튼을 표시 -->
+                    <div id="follunfoll" <a th:if="${session.user != null and session.user != user.id}">
+                        <!-- 팔로우 상태에 따라 버튼 텍스트와 동작 변경 -->
+                        <form th:action="@{'/users/' + ${session.user} + '/' + (${isFollowing} ? 'unfollow' : 'follow') + '/' + ${user.id}}" method="post">
+                            <button type="submit" th:text="${isFollowing ? '언팔로우' : '팔로우'}"></button>
+                        </form>
+                    </div>
+                </a>
+
+                </div>
+                <p class="user-redline"></p>
+                <div class="mp-review-wrapper" style="background-color:white">
+                    <a href="#" class="user-evolution" <a th:href="@{'/users/profile/' + ${user.id} + '/ratings'}">
+                    <span class="user-e-number" th:text="${user.ratingsCount}"></span>
+                    <span class="user-e-message">평가</span>
+                </a>
+                    <div class="evolution-line"></div>
+                    <a href="#" class="user-comment" <a th:href="@{'/users/profile/' + ${user.id} + '/comments'}">
+                    <span class="user-c-number" th:text="${user.commentsCount}"></span>
+                    <span class="user-c-message">코멘트</span>
+                </a>
+                </div>
+            </div>
+        </div>
+        <div id="storage" class="storage">
+            <div class="storage-h">보관함</div>
+            <a th:href="@{'/users/profile/' + ${user.id} + '/wish'}" >
+                <div class="mp-movie circle">
+                    <i class="bi bi-heart"></i>
+                </div>
+                <p class="mp-movie-comment"font-size="bold">보고싶어요</p>
+            </a>
+            <a th:href="@{'/users/profile/' + ${user.id} + '/ratings'}" >
+                <div class="mp-movie circle">
+                    <i class="bi bi-caret-right-square"></i>
+
+                </div>
+                <p class="mp-movie-comment"font-size="bold">보는 중이에요</p>
+            </a>
+        </div>
     </div>
 </section>
+
+
+
+
+<!--<section layout:fragment="content">-->
+<!--    <p>My page</p>-->
+<!--    <p>name: <span th:text="${user.name}"></span></p>-->
+<!--    <p>email: <span th:text="${user.email}"></span></p>-->
+<!--    <p>팔로워: <a th:href="@{'/users/profile/' + ${user.id} + '/followers'}" th:text="${user.followers}"></a></p>-->
+<!--    <p>팔로잉: <a th:href="@{'/users/profile/' + ${user.id} + '/followings'}" th:text="${user.followings}"></a></p>-->
+<!--    <p>평가 수: <a th:href="@{'/users/profile/' + ${user.id} + '/ratings'}" th:text="${user.ratingsCount}"></a></p>-->
+<!--    <p>코멘트 수: <a th:href="@{'/users/profile/' + ${user.id} + '/comments'}" th:text="${user.commentsCount}"></a></p>-->
+<!--    <p>위시리스트 수: <a th:href="@{'/users/profile/' + ${user.id} + '/wish'}" th:text="${user.wishCount}"></a></p>-->
+<!--    <p>워칭리스트 수: <a th:href="@{'/users/profile/' + ${user.id} + '/watching'}" th:text="${user.watchingCount}"></a></p>-->
+<!--</section>-->
 </body>
+
 </html>
