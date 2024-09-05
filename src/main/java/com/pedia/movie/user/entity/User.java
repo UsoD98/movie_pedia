@@ -111,19 +111,19 @@ public class User {
         this.commentsCount--;
     }
 
-    void incrementWishCount() {
+    public void incrementWishCount() {
         this.wishCount++;
     }
 
-    void decrementWishCount() {
+    public void decrementWishCount() {
         this.wishCount--;
     }
 
-    void incrementWatchingCount() {
+    public void incrementWatchingCount() {
         this.watchingCount++;
     }
 
-    void decrementWatchingCount() {
+    public void decrementWatchingCount() {
         this.watchingCount--;
     }
 

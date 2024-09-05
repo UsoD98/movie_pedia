@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +20,6 @@ public class WishWatchController {
     String resultType;
     String message;
 
-    // 평점 등록
     @PostMapping("films/{filmId}/wish_watching")
     public String WishWatching( @PathVariable Long filmId, @RequestParam("action") String action, HttpSession session, RedirectAttributes redirectAttributes) {
         Long userId = (Long) session.getAttribute("user");
@@ -45,7 +43,5 @@ public class WishWatchController {
         redirectAttributes.addFlashAttribute("message", message);
         return nextPage;
     }
-
-    // 평점 삭제
 
 }
