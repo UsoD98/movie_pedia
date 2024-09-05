@@ -60,9 +60,9 @@ public class User {
     private List<Rating> ratings;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-
     private List<WishWatchList> wishWatchLists;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     // 생성 시간 자동 저장
