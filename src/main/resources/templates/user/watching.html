@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>평가 내역</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>평가 내역</h1>
+    <div class="wishwatchs-container">
+        <div th:each="wishwatch : ${wishwatchs}" class="wishwatch-item">
+            <a th:href="@{'/films/' + ${wishwatch.filmId}}">
+                <img th:src="${'https://image.tmdb.org/t/p/w200' + wishwatch.filmPosterPath}"
+                     th:alt="${wishwatch.filmTitle + ' poster'}" class="film-poster">
+                <div class="wishwatch-details">
+                    <h3 th:text="${wishwatch.filmTitle}" class="film-title"></h3>
+                </div>
+            </a>
+        </div>
+    </div>
+    <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
+</section>
+</body>
+</html>
