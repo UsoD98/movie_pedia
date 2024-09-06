@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Form</title>
+    <style>
+        .register-form-container {
+            width: 300px;
+            height: 400px;
+            padding: 20px;
+            margin: 0 auto;
+            background-color: white;
+            outline: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            border-radius:10px;
+            justify-content: center; /* 내용 중앙 정렬 */
+            align-items: center;     /* 내용 중앙 정렬 */
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+
+        }
+
+        span {
+            color: #ff2f6e;
+        }
+
+        #register-submit-button {
+            width: 100%;
+            height: 40px;
+            background-color: #ff2f6e;
+            color: white;
+            cursor: pointer;
+            border: none;
+            margin-bottom:10px;
+        }
+
+        #register-logo h2,
+        #register-logo h3 {
+            display: flex;
+            justify-content: center;
+            margin-bottom:10px;
+        }
+
+        .register-prompt {
+            display: flex;
+            justify-content: center;
+            color: #ccc;
+            font-weight: 500;
+            margin-bottom:15px;
+        }
+
+        .register-prompt a {
+            text-decoration: none;
+            font-weight: 100;
+            margin-left: 3px;
+
+            color: #ff2f6e;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div id="register-form-wrapper" class="register-form-wrapper">
+        <div id="register-form-container" class="register-form-container">
+            <div id="register-logo" class="register-logo">
+                <h2><span>WATCHA</span>PEDIA</h2>
+                <h3>비밀번호 찾기</h3>
+            </div>
+            <div id="register-input-form">
+                <form id="register-form-box" class="register-form-box" th:action="@{/users/findPw_Auth}" method="post">
+                    <div id="register-name-input" class="register-input">
+                        <input type="text" placeholder="이름" name="name" required>
+                    </div>
+                    <div id="register-email-input" class="register-input">
+                        <input type="email" placeholder="이메일" name="email" required>
+                    </div>
+                    <button id="register-submit-button" type="submit" class="register-button">임시 비밀번호 생성</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

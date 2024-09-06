@@ -135,6 +135,79 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("/modifyPw")
+    public String modifypw(){
+        return "/user/modifyPw";
+    }
+    @PostMapping("/modifyPw")
+    public String modifyPw(@RequestParam("password") String password,
+                           @RequestParam("new_password") String new_password,
+                           @RequestParam("new_password_check") String new_password_check,
+                           RedirectAttributes redirectAttributes,
+                           HttpSession httpSession,
+                           Model model) {
+        Long userId = (Long) httpSession.getAttribute("user");
+        int result = userService.modifyPW(userId,password,new_password,new_password_check);
+
+        String nextPage = "redirect:/users/modifyPw";
+        switch (result) {
+            case UserService.SUCCESS:
+                log.info("비밀번호 변경 성공");
+                httpSession.invalidate();
+                resultType = "success";
+                message = "비밀번호가 변경 되었습니다.";
+                nextPage = "redirect:/";
+                break;
+            case UserService.NOT_MATCH:
+                log.info("비밀번호 변경 실패");
+                resultType = "fail";
+                message = "비밀번호가 일치하지 않습니다.";
+                break;
+            default:
+                log.info("비밀번호 인증 실패");
+                resultType = "fail";
+                message = "현재 비밀번호가 일치하지 않습니다.";
+                break;
+        }
+
+        redirectAttributes.addFlashAttribute("resultType", resultType);
+        redirectAttributes.addFlashAttribute("message", message);
+        return nextPage;
+
+    }
+
+    @GetMapping("/findPw_Auth")
+    public String findpw_auth(){
+        return "/user/findPw_Auth";
+    }
+
+    @PostMapping("/findPw_Auth")
+    public String findPwAuth(@RequestParam("name") String name, @RequestParam("email") String email, RedirectAttributes redirectAttributes,Model model) {
+
+        int result = userService.SetAndSendingPW(email,name);
+
+
+        String nextPage = "redirect:/users/findPw_Auth";
+        switch (result) {
+            case UserService.SUCCESS:
+                log.info("메일 전송 성공");
+                resultType = "success";
+                message = "임시 메일이 전송되었습니다.";
+                nextPage = "redirect:/";
+                break;
+            case UserService.NOT_MATCH:
+                log.info("회원 정보 에러");
+                resultType = "fail";
+                message = "회원 정보가 다릅니다.";
+                break;
+        }
+
+        redirectAttributes.addFlashAttribute("resultType", resultType);
+        redirectAttributes.addFlashAttribute("message", message);
+        return nextPage;
+
+    }
+
     // 타인 프로필
     @GetMapping("/profile/{id}")
     public String showProfile(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes, HttpSession session) {

@@ -12,6 +12,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 이메일로 회원정보 가져오기
     User findByEmail(String email);
 
+    // 비밀번호 검증
+
+    User findByNameAndEmail(String name, String email);
+
     // 이메일로 유저 아이디 가져오기
     @Query("select u.id from User u where u.email = :email")
     Long findIdByEmail(String email);
