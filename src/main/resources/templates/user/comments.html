@@ -5,26 +5,140 @@
 <head>
     <meta charset="UTF-8">
     <title>코멘트</title>
+    <style>
+        /* 헤더 */
+        .comments-header-container {
+            border-bottom: 1px solid rgb(230, 230, 230);
+
+            position: fixed;
+            top: 0;
+            z-index: 9999;
+            width: 100%;
+            margin-top: 68px;
+            background-color: white;
+        }
+
+        .comments-header {
+            margin-left: 20px;
+            margin-right: 15px;
+            margin-top: 10px;
+        }
+
+        .comments-header > div {
+            padding-top: 1rem;
+        }
+
+        .comments-header a {
+            color: #FF0558;
+            font-weight: 600;
+        }
+
+        .comments-header h1 {
+            padding: 0.5rem 0;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* 섹션(아이템) */
+        .comments-section-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            padding: 5rem 0 2rem 0;
+        }
+
+        .comment-item {
+            margin-bottom: 1rem;
+            width: 640px;
+            border: 0.1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .comment-item > a {
+            display: flex;
+            padding: 1rem;
+        }
+
+        .film-poster {
+            border-radius: 5px;
+            width: 100px; height: 140px;
+            margin-right: 0.5rem;
+        }
+
+        .comment-info {
+            display: flex;
+            justify-content: space-between;
+            width: 500px;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-info > p {
+            /* font-size: 0.9rem; */
+            color: rgb(253, 160, 20);
+            font-weight: bold;
+        }
+
+        .comment-info h3 {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .comment-day {
+            font-size: 0.9rem;
+            color: #66666696;
+        }
+
+        .film-info > p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .comment-inner {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 110px;
+        }
+
+        .comment-inner > div {
+            display: flex;
+            justify-content: flex-end;
+            width: 500px;
+        }
+
+    </style>
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>코멘트 목록</h1>
-
-    <div th:each="comment : ${comments}" class="comment-item">
-        <div class="film-info">
-            <a th:href="@{'/films/' + ${comment.filmId}}">
-                <img th:src="${'https://image.tmdb.org/t/p/w200' + comment.filmPosterPath}" alt=""/>
-                <h3 th:text="${comment.filmTitle}"></h3>
-            </a>
-        </div>
-        <div class="comment-content">
-            <p th:text="${comment.content}"></p>
-            <p>평점: <span th:text="${comment.ratingScore != null ? comment.ratingScore : '평가 없음'}"></span></p>
-            <p>작성일: <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+    <div class="comments-header-container">
+        <div class="comments-header">
+            <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
+            <h1>코멘트 목록</h1>
         </div>
     </div>
-
-    <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
+    <div class="comments-section-container">
+        <div class="comment-item" th:each="comment : ${comments}">
+            <a th:href="@{'/films/' + ${comment.filmId}}">
+                <img class="film-poster" th:src="${'https://image.tmdb.org/t/p/w200' + comment.filmPosterPath}" alt=""/>
+                <div class="film-info">
+                    <div class="comment-info">
+                        <div>
+                            <h3 th:text="${comment.filmTitle}"></h3>
+                        </div>
+                        <p>★ <span th:text="${comment.ratingScore != null ? comment.ratingScore : '평가 없음'}"></span></p>
+                    </div>
+                    <div class="comment-inner">
+                        <p th:text="${comment.content}"></p>
+                        <div>
+                            <p class="comment-day"><span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </section>
 </body>
 </html>
