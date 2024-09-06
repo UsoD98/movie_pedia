@@ -93,4 +93,8 @@ public class RatingService {
         ratingResponse.setFilmPosterPath(rating.getFilm().getPosterPath());
         return ratingResponse;
     }
+
+    public Long getRatingCount() {
+        return ratingRepository.countAllRatings();
+    }
 }
