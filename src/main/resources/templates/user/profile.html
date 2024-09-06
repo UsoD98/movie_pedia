@@ -310,10 +310,42 @@
     .follow-button:hover {
         background-color: #333; /* 버튼에 마우스를 올렸을 때 배경색을 조금 더 어둡게 설정 */
     }
+
+        /* 모달 배경 */
+.modal {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    z-index: 1; /* 모달을 최상위에 배치 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 검은색 배경 */
+}
+
+/* 모달 창 내용 */
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto; /* 화면 중앙에 위치 */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px; /* 모달 너비 */
+}
+
+/* 닫기 버튼 */
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
     </style>
 </head>
 <body>
 <section layout:fragment="content">
+
 
     <div  id="white-box" style="background-color: #f2f2f2; min-height: 100vw">
         <div id="mp-section-wrapper" class="mp-section-wrapper">
@@ -380,8 +412,42 @@
             </a>
         </div>
     </div>
-</section>
 
+    <!-- 모달 구조 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>계정 관리</h2>
+            <button onclick="changePassword()">비밀번호 변경</button>
+            <button onclick="logout()">로그아웃</button>
+            <button onclick="deleteAccount()">회원탈퇴</button>
+        </div>
+    </div>
+</section>
+<script th:inline="javascript">
+    // DOM 요소 가져오기
+const modal = document.getElementById('modal');
+const gearIcon = document.getElementById('fa-gear');
+const closeBtn = document.querySelector('.close-btn');
+
+// 아이콘 클릭 시 모달 표시
+gearIcon.addEventListener('click', () => {
+    modal.style.display = 'block';
+});
+
+// 닫기 버튼 클릭 시 모달 숨기기
+closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// 모달 외부 클릭 시 모달 숨기기
+window.addEventListener('click', (event) => {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+});
+
+</script>
 
 
 

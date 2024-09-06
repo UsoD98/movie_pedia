@@ -292,81 +292,144 @@
             position: relative;
         }
 
+        .modal {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed;
+            z-index: 1; /* 모달을 최상위에 배치 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명 검은색 배경 */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto; /* 화면 중앙에 위치 */
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px; /* 모달 너비 */
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-button {
+            height:60px;
+            align-items: center;
+            justify-content: center; /* 중앙 정렬 */
+            font-size: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            background-color: #ff7f7f; /* Light pink color */
+            border-radius: 5px;
+            border: none;
+            box-sizing: border-box; /* Padding과 border를 너비에 포함시킴 */
+            cursor: pointer;
+            margin: 10px; /* 버튼 사이 여백 */
+
+        }
+
+        .modal-button:hover {
+            background-color: #ff4d4d; /* Slightly darker pink on hover */
+        }
+
     </style>
 </head>
 <body>
 <section layout:fragment="content">
 
-    <div  id="white-box" style="background-color: #f2f2f2; min-height: 100vw">
+    <!-- 모달 구조 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 style="margin-left: 10px">계정 관리</h2>
+            <a th:href="@{'/users/modifyPw'}" class="modal-button">비밀번호 변경</a>
+            <a th:href="@{'/users/logout'}" class="modal-button">로그아웃</a>
+        </div>
+    </div>
+    <div id="white-box" style="background-color: #f2f2f2; min-height: 100vw">
         <div id="mp-section-wrapper" class="mp-section-wrapper">
             <div id="mp-section" class="mp-section">
                 <div class="mp-section-top" style="padding-top: calc(11.25% + 32px);">
-                    <i class="fa-duotone fa-solid fa-gear" style="margin-right:10px;"></i>
+                    <!-- 아이콘에 id와 올바른 클래스를 추가 -->
+                    <i id="fa-gear" class="fa-solid fa-gear" style="margin-right:10px; cursor: pointer;"></i>
                     <i id="user2" class="fa-solid fa-user"></i>
                 </div>
-                <div id="mp-user-info" class="mp-user-info">
-                </div>
+                <div id="mp-user-info" class="mp-user-info"></div>
                 <div id="user-profile">
                     <h1 class="user-name" th:text="${user.name}"></h1>
-                    <!--                <p>name: <span th:text="${user.name}"></span></p>-->
                     <p class="user-email" th:text="${user.email}"></p>
-                    <!--                <p>email: <span th:text="${user.email}"></span></p>-->
                 </div>
                 <div id="user-following">
                     <a class="user-follower" th:href="@{'/users/profile/' + ${user.id} + '/followers'}">
                         <strong th:text="${user.followers}"></strong>
                     </a>
-                    <a class="user-follow" <a th:href="@{'/users/profile/' + ${user.id} + '/followings'}">
+                    <a class="user-follow" th:href="@{'/users/profile/' + ${user.id} + '/followings'}">
                         <strong th:text="${user.followings}"></strong>
                     </a>
                 </div>
                 <p class="user-redline"></p>
                 <div class="mp-review-wrapper" style="background-color:white">
-                    <a href="#" class="user-evolution" <a th:href="@{'/users/profile/' + ${user.id} + '/ratings'}">
-                    <span class="user-e-number" th:text="${user.ratingsCount}"></span>
-                    <span class="user-e-message">평가</span>
-                </a>
+                    <a href="#" class="user-evolution" th:href="@{'/users/profile/' + ${user.id} + '/ratings'}">
+                        <span class="user-e-number" th:text="${user.ratingsCount}"></span>
+                        <span class="user-e-message">평가</span>
+                    </a>
                     <div class="evolution-line"></div>
-                    <a href="#" class="user-comment" <a th:href="@{'/users/profile/' + ${user.id} + '/comments'}">
-                    <span class="user-c-number" th:text="${user.commentsCount}"></span>
-                    <span class="user-c-message">코멘트</span>
-                </a>
+                    <a href="#" class="user-comment" th:href="@{'/users/profile/' + ${user.id} + '/comments'}">
+                        <span class="user-c-number" th:text="${user.commentsCount}"></span>
+                        <span class="user-c-message">코멘트</span>
+                    </a>
                 </div>
             </div>
         </div>
         <div id="storage" class="storage">
             <div class="storage-h">보관함</div>
-            <a th:href="@{'/users/profile/' + ${user.id} + '/wish'}" >
+            <a th:href="@{'/users/profile/' + ${user.id} + '/wish'}">
                 <div class="mp-movie circle">
                     <i class="bi bi-heart"></i>
                 </div>
-                <p class="mp-movie-comment"font-size="bold">보고싶어요</p>
+                <p class="mp-movie-comment" style="font-weight:bold">보고싶어요</p>
             </a>
             <a th:href="@{'/users/profile/' + ${user.id} + '/watching'}" >
                 <div class="mp-movie circle">
                     <i class="bi bi-caret-right-square"></i>
-
                 </div>
-                <p class="mp-movie-comment"font-size="bold">보는 중이에요</p>
+                <p class="mp-movie-comment" style="font-weight:bold">보는 중이에요</p>
             </a>
         </div>
     </div>
+    <script th:inline="javascript">
+        // DOM 요소 가져오기
+    const modal = document.getElementById('modal');
+    const gearIcon = document.getElementById('fa-gear');
+    const closeBtn = document.querySelector('.close-btn');
+
+    // 아이콘 클릭 시 모달 표시
+    gearIcon.addEventListener('click', () => {
+        modal.style.display = 'block';
+    });
+
+    // 닫기 버튼 클릭 시 모달 숨기기
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // 모달 외부 클릭 시 모달 숨기기
+    window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
+    </script>
 </section>
 
-
-
-
-<!--<section layout:fragment="content">-->
-<!--    <p>My page</p>-->
-<!--    <p>name: <span th:text="${user.name}"></span></p>-->
-<!--    <p>email: <span th:text="${user.email}"></span></p>-->
-<!--    <p>팔로워: <a th:href="@{'/users/profile/' + ${user.id} + '/followers'}" th:text="${user.followers}"></a></p>-->
-<!--    <p>팔로잉: <a th:href="@{'/users/profile/' + ${user.id} + '/followings'}" th:text="${user.followings}"></a></p>-->
-<!--    <p>평가 수: <a th:href="@{'/users/profile/' + ${user.id} + '/ratings'}" th:text="${user.ratingsCount}"></a></p>-->
-<!--    <p>코멘트 수: <a th:href="@{'/users/profile/' + ${user.id} + '/comments'}" th:text="${user.commentsCount}"></a></p>-->
-<!--    <p>위시리스트 수: <a th:href="@{'/users/profile/' + ${user.id} + '/wish'}" th:text="${user.wishCount}"></a></p>-->
-<!--    <p>워칭리스트 수: <a th:href="@{'/users/profile/' + ${user.id} + '/watching'}" th:text="${user.watchingCount}"></a></p>-->
-<!--</section>-->
 </body>
 
 </html>
