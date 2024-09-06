@@ -5,10 +5,78 @@
 <head>
     <meta charset="UTF-8">
     <title>평가 내역</title>
+    <style>
+        /* 헤더 */
+        .wish-header-container {
+            border-bottom: 1px solid rgb(230, 230, 230);
+
+            position: fixed;
+            top: 0;
+            z-index: 9999;
+            width: 100%;
+            margin-top: 69px;
+            background-color: white;
+        }
+
+        .wish-header {
+            margin-left: 20px;
+            margin-right: 15px;
+            margin-top: 10px;
+        }
+
+        .wish-header > div {
+            padding-top: 1rem;
+        }
+
+        .wish-header a {
+            color: #FF0558;
+            font-weight: 600;
+        }
+
+        .wish-header h1 {
+            padding: 0.5rem 0;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* 섹션 */
+        .wishwatchs-container {
+            margin-left: 20px;
+            margin-right: 15px;
+            margin-top: 160px;
+            /* display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; */
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(146px, 1fr));
+            gap: 5px;
+
+        }
+
+        .wishwatchs-container > a {
+            float: left;
+        }
+
+        .wishwatchs-container img {
+            width: 146px; height: 212px;
+            border-radius: 5px;
+        }
+
+        .wishwatch-details h3 {
+            font-size: 0.9rem;
+            width: 146px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>평가 내역</h1>
+    <div class="wish-header-container">
+        <div class="wish-header">
+            <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
+            <h1>보고 싶어요</h1>
+        </div>
+    </div>
     <div class="wishwatchs-container">
         <div th:each="wishwatch : ${wishwatchs}" class="wishwatch-item">
             <a th:href="@{'/films/' + ${wishwatch.filmId}}">
@@ -20,7 +88,6 @@
             </a>
         </div>
     </div>
-    <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
 </section>
 </body>
 </html>

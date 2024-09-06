@@ -5,10 +5,91 @@
 <head>
     <meta charset="UTF-8">
     <title>평가 내역</title>
+    <style>
+        /* 헤더 */
+        .ratings-header-container {
+            border-bottom: 1px solid rgb(230, 230, 230);
+
+            position: fixed;
+            top: 0;
+            z-index: 9999;
+            width: 100%;
+            margin-top: 69px;
+            background-color: white;
+        }
+
+        .ratings-header {
+            margin-left: 20px;
+            margin-right: 15px;
+            margin-top: 10px;
+        }
+
+        .ratings-header > div {
+            padding-top: 1rem;
+        }
+
+        .ratings-header a {
+            color: #FF0558;
+            font-weight: 600;
+        }
+
+        .ratings-header h1 {
+            padding: 0.5rem 0;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* 섹션 */
+        .ratings-container {
+            margin-left: 20px;
+            margin-right: 15px;
+            margin-top: 160px;
+            /* display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between; */
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(146px, 1fr));
+            gap: 5px;
+
+        }
+
+        .ratings-container > a {
+            float: left;
+        }
+
+        .ratings-container img {
+            width: 146px; height: 212px;
+            border-radius: 5px;
+        }
+
+        .rating-details {
+            font-size: 0.8rem;
+            width: 146px;
+            margin-bottom: 20px;
+        }
+
+        .film-title {
+            font-size: 0.9rem;
+            overflow:hidden;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            margin-bottom: 3px;
+        }
+
+        .rating-score {
+            color: rgb(255, 174, 0);
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>평가 내역</h1>
+    <div class="ratings-header-container">
+        <div class="ratings-header">
+            <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
+            <h1>평가한 작품들</h1>
+        </div>
+    </div>
     <div class="ratings-container">
         <div th:each="rating : ${ratings}" class="rating-item">
             <a th:href="@{'/films/' + ${rating.filmId}}">
@@ -21,7 +102,6 @@
             </a>
         </div>
     </div>
-    <a th:href="@{'/users/profile/' + ${profileUserId}}">프로필로 돌아가기</a>
 </section>
 </body>
 </html>
