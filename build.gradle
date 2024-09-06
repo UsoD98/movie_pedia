@@ -37,6 +37,8 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     //h2 //
     runtimeOnly 'com.h2database:h2'
+    //메일 전송//
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
