@@ -3,7 +3,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <footer th:fragment="footer">
     <section id="footer-top">
-        <p>지금까지 <span>★723,291,261 개의 평가</span>가 쌓였어요</p>
+        <p>지금까지 <span>★</span> <span th:text="${global_rating}"></span>개의 평가가 쌓였어요</p>
+
     </section>
     <section id="footer-bottom">
         <div id="footer-bottom-txt">

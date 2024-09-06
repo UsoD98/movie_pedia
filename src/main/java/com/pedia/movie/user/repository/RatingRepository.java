@@ -16,6 +16,9 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     List<Rating> findAllByUser(User user);
 
+    @Query("SELECT COUNT(*) FROM Rating r")
+    long countAllRatings();
+
     @Query("SELECT r FROM Rating r JOIN FETCH r.film WHERE r.user.id = :userId")
     List<Rating> findAllByUserIdWithFilm(@Param("userId") Long userId);
 
