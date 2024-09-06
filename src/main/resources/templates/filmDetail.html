@@ -6,493 +6,494 @@
     <meta charset="UTF-8">
     <title>Film Detail</title>
     <style>
-
+        .entire-container {
+            display: flex;
+            flex-direction: column; /* 세로 방향으로 정렬 */
+        }
         .backdrop-poster {
-            position: absolute;
-            top: 0;
-            left: 0;
-            justify-content: center;
-            width: 100vw;
-            height: 50%;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-position-x: center;
-            background-position-y: center;
-            background-size: cover;
-            height: fit-content;
-        }
-
-        .film-backdrop {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 이미지가 요소를 꽉 채우도록 설정 */
-        }
-
-        .backdrop-content {
-            position: absolute; /* 텍스트를 이미지 위에 고정 */
-            bottom: 25%; /* 이미지 아래에서 떨어진 위치에 텍스트 배치 */
-            left: 28%; /* 왼쪽에서 떨어진 위치에 텍스트 배치 */
-            color: white; /* 텍스트 색상을 흰색으로 설정 */
-        }
-
-        .title {
-            font-size: 4em;
-            color: white; /* 텍스트 색상을 흰색으로 설정 */
-            margin: 0 0 30px 0; /* 제목과 다른 텍스트 사이의 여백 */
-        }
-
-        .release_date,
-        .originalTitle {
-            font-size: 1em;
-            margin: 0; /* 텍스트 간격을 최소화 */
-        }
-
-
-        .container {
-            max-width: 800px;
-            margin: auto;
-            margin-top: 20px; /* 상단 여백 추가 */
-
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px; /* 패딩 추가 */
-            height: fit-content;
-        }
-
-        .under-backdrop-poster {
-            margin-top: 1rem;
-        }
-
-        .film-poster {
-            max-width: 300px;
-            height: auto;
-            display: block;
-            margin: 0 auto 20px;
-        }
-
-        .film-backdrop {
-            width: 100%;
-            height: auto;
-            margin-bottom: 20px;
-        }
-
-        .toInfo {
-            position: absolute;
-            bottom: 18%; /* 이미지 아래에서 떨어진 위치에 텍스트 배치 */
-            right: 5%; /* 왼쪽에서 떨어진 위치에 텍스트 배치 */
-
-        }
-
-        .toInfo button {
-            background-color: #ff8a80; /* 연다홍색으로 배경색 설정 */
-            color: white; /* 아이콘 색상을 흰색으로 설정 */
-            border: none; /* 테두리 제거 */
-            border-radius: 50%; /* 버튼을 원형으로 설정 */
-            width: 100px; /* 버튼의 너비 설정 */
-            height: 100px; /* 버튼의 높이 설정 */
-            display: flex; /* 아이콘 중앙 정렬 */
-            align-items: center;
-            justify-content: center;
-            cursor: pointer; /* 커서를 포인터로 설정 */
-            transition: transform 0.2s; /* 마우스 호버 시 효과 */
-        }
-
-        .toInfo button i {
-            font-size: 50px
-        }
-
-        .toInfo button:hover {
-            transform: scale(1.1); /* 마우스 호버 시 크기 확대 */
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-
-        .information-list {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-            justify-content: space-between;
-        }
-
-        .rating-section {
-            position: relative; /* 위치 조정 */
-            left: -20px; /* 왼쪽으로 이동 */
-            padding: 20px;
-            margin-right: 35px; /* 두 요소 사이의 간격 */
-        }
-
-        .rating-score {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px; /* 버튼 간격 조정 */
-            justify-content: center; /* 가운데 정렬 */
-            margin-top: 20px;
-        }
-
-        .action-button, .comment-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #ffffff;
-            border: none;
-            padding: 8px 15px;
-            font-size: 16px; /* 글자 크기 조정 */
-            color: #333333;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            outline: none;
-            text-align: center; /* 텍스트를 가운데 정렬 */
-        }
-
-        .action-button i, .comment-button i {
-            font-size: 24px; /* 아이콘 크기 조정 */
-            transition: transform 0.3s ease; /* 부드러운 확대 효과 */
-            margin-bottom: 5px; /* 아이콘과 텍스트 간격 조정 */
-        }
-
-        .action-button:hover i, .comment-button:hover i {
-            transform: scale(1.5); /* 아이콘 확대 */
-        }
-
-        .action-button:hover {
-            background-color: #f1f1f1;
-            color: #333333;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .checked-button {
-            background-color: #ff6f61;
-            color: #ffffff;
-        }
-
-        /* 체크된 버튼 내 아이콘의 색상 */
-        .checked-button i {
-            color: #e04e4e; /* 연다홍색 아이콘 */
-        }
-
-        .checked-button:hover {
-            background-color: #f1f1f1;
-        }
-
-        .comment-button {
-            color: #333333;
-            background-color: #ffffff;
-        }
-
-        .comment-button:hover {
-            background-color: #f1f1f1;
-        }
-
-        .film-info {
-            margin-bottom: 10px;
-        }
-
-        .film-info strong {
-            color: #555;
-        }
-
-        .film-overview {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
-
-        .star-rating {
-            font-size: 0;
-            white-space: nowrap;
-            display: inline-block;
-            width: 250px;
-            height: 50px;
-            overflow: hidden;
-            position: relative;
-            background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjREREREREIiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
-            background-size: 50px 50px;
-        }
-
-        .star-rating label {
-            opacity: 0;
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            z-index: 1;
-            background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
-            background-size: 50px 50px;
-        }
-
-        .star-rating input {
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            opacity: 0;
-            display: inline-block;
-            width: 10%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            z-index: 2;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .star-rating input:hover + label,
-        .star-rating input:checked + label {
-            opacity: 1;
-        }
-
-        .star-rating input:nth-of-type(1) + label {
-            width: 10%;
-        }
-
-        .star-rating input:nth-of-type(2) + label {
-            width: 20%;
-        }
-
-        .star-rating input:nth-of-type(3) + label {
-            width: 30%;
-        }
-
-        .star-rating input:nth-of-type(4) + label {
-            width: 40%;
-        }
-
-        .star-rating input:nth-of-type(5) + label {
-            width: 50%;
-        }
-
-        .star-rating input:nth-of-type(6) + label {
-            width: 60%;
-        }
-
-        .star-rating input:nth-of-type(7) + label {
-            width: 70%;
-        }
-
-        .star-rating input:nth-of-type(8) + label {
-            width: 80%;
-        }
-
-        .star-rating input:nth-of-type(9) + label {
-            width: 90%;
-        }
-
-        .star-rating input:nth-of-type(10) + label {
-            width: 100%;
-        }
-
-        /* .score 클래스 스타일링 */
-
-
-        .score p {
-            margin: 0; /* 기본 여백 제거 */
-            font-size: 18px; /* 기본 폰트 크기 */
-            color: #333; /* 텍스트 색상 */
-        }
-
-        .score strong {
-            font-size: 24px; /* 강조된 폰트 크기 */
-            display: inline-flex; /* 아이콘과 텍스트를 수평으로 정렬 */
-            align-items: center; /* 수직 가운데 정렬 */
-        }
-
-        .score strong i {
-            font-size: 24px; /* 아이콘 크기 조정 */
-        }
-
-        .score span {
-            font-size: 20px; /* 기본 텍스트 크기 조정 */
-        }
-
-        <!--
-        이미지 좌우 넘기기-- >
-            /* 슬라이드 컨테이너 스타일 */
-        .slider-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            max-width: 800px; /* 디자인에 맞게 조정 */
-            margin: auto;
-        }
-
-        /* 이미지 컨테이너 설정 */
-        .film-container {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
-
-        /* 각 슬라이드 카드 스타일 */
-        .film-card {
-            min-width: 100%;
-            box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
-        }
-
-        /* 이미지 스타일 */
-        .film-img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* 버튼 박스 스타일 */
-        .slider-button-box {
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-        }
-
-        /* 좌우 버튼 스타일 */
-        .prev, .next {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        .image-box {
-            overflow: hidden;
-        }
-
-        .video-slider-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            max-width: 800px; /* Adjust as needed */
-            margin: auto;
-        }
-
-        .video-film-container {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
-
-        .video-film-card {
-            min-width: 100%;
-            box-sizing: border-box;
-        }
-
-        iframe {
-            width: 100%;
-            height: 400px;
-        }
-
-        .video-slider-button-box {
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-        }
-
-        .video-prev, .video-next {
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        /* New styles for sliders */
-        .slider-section {
-            margin-top: 40px;
-        }
-
-        .slider-container {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            max-width: 800px;
-            margin: auto;
-        }
-
-        .slider-content {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
-
-        .slider-item {
-            min-width: 100%;
-            box-sizing: border-box;
-            padding: 10px;
-        }
-
-        .slider-button-box {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-        }
-
-        .slider-button {
-            background-color: rgba(200, 200, 200);
-            color: #000;
-            border: none;
-            padding: 8px;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 10px;
-            opacity: 20%;
-        }
-
-        .slider-button:hover {
-            background-color: rgba(200, 200, 200, 0.5);
-        }
-
-        /* Comment styles */
-        .comment-item {
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .comment-user {
-            font-weight: bold;
-        }
-
-        .comment-rating {
-            color: #f39c12;
-        }
-
-        /* Video styles */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            height: 0;
-            overflow: hidden;
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    justify-content: center;
+                    width: 100vw;
+                    height: 50%;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-position-x: center;
+                    background-position-y: center;
+                    background-size: cover;
+                    height: fit-content;
+                }
+
+                .film-backdrop {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover; /* 이미지가 요소를 꽉 채우도록 설정 */
+                }
+
+                .backdrop-content {
+                    position: absolute; /* 텍스트를 이미지 위에 고정 */
+                    bottom: 25%; /* 이미지 아래에서 떨어진 위치에 텍스트 배치 */
+                    left: 28%; /* 왼쪽에서 떨어진 위치에 텍스트 배치 */
+                    color: white; /* 텍스트 색상을 흰색으로 설정 */
+                }
+
+                .title {
+                    font-size: 4em;
+                    color: white; /* 텍스트 색상을 흰색으로 설정 */
+                    margin: 0 0 30px 0; /* 제목과 다른 텍스트 사이의 여백 */
+                }
+
+                .release_date,
+                .originalTitle {
+                    font-size: 1em;
+                    margin: 0; /* 텍스트 간격을 최소화 */
+                }
+
+
+                .container {
+                    max-width: 800px;
+                    margin: auto;
+                    background: white;
+                    border-radius: 5px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    padding: 20px; /* 패딩 추가 */
+                    height: fit-content;
+                }
+
+                .under-backdrop-poster {
+                    position: relative;
+                }
+
+                .film-poster {
+                    max-width: 300px;
+                    height: auto;
+                    display: block;
+                    margin: 0 auto 20px;
+                }
+
+                .film-backdrop {
+                    width: 100%;
+                    height: auto;
+                    margin-bottom: 20px;
+                }
+
+                .toInfo {
+                    position: absolute;
+                    bottom: 18%; /* 이미지 아래에서 떨어진 위치에 텍스트 배치 */
+                    right: 5%; /* 왼쪽에서 떨어진 위치에 텍스트 배치 */
+
+                }
+
+                .toInfo button {
+                    background-color: #ff8a80; /* 연다홍색으로 배경색 설정 */
+                    color: white; /* 아이콘 색상을 흰색으로 설정 */
+                    border: none; /* 테두리 제거 */
+                    border-radius: 50%; /* 버튼을 원형으로 설정 */
+                    width: 100px; /* 버튼의 너비 설정 */
+                    height: 100px; /* 버튼의 높이 설정 */
+                    display: flex; /* 아이콘 중앙 정렬 */
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer; /* 커서를 포인터로 설정 */
+                    transition: transform 0.2s; /* 마우스 호버 시 효과 */
+                }
+
+                .toInfo button i {
+                    font-size: 50px
+                }
+
+                .toInfo button:hover {
+                    transform: scale(1.1); /* 마우스 호버 시 크기 확대 */
+                }
+
+                h1 {
+                    color: #333;
+                    text-align: center;
+                }
+
+                .information-list {
+                    display: flex;
+                    gap: 15px;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 20px;
+                    justify-content: space-between;
+                }
+
+                .rating-section {
+                    position: relative; /* 위치 조정 */
+                    left: -20px; /* 왼쪽으로 이동 */
+                    padding: 20px;
+                    margin-right: 35px; /* 두 요소 사이의 간격 */
+                }
+
+                .rating-score {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .action-buttons {
+                    display: flex;
+                    gap: 10px; /* 버튼 간격 조정 */
+                    justify-content: center; /* 가운데 정렬 */
+                    margin-top: 20px;
+                }
+
+                .action-button, .comment-button {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    background-color: #ffffff;
+                    border: none;
+                    padding: 8px 15px;
+                    font-size: 16px; /* 글자 크기 조정 */
+                    color: #333333;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    outline: none;
+                    text-align: center; /* 텍스트를 가운데 정렬 */
+                }
+
+                .action-button i, .comment-button i {
+                    font-size: 24px; /* 아이콘 크기 조정 */
+                    transition: transform 0.3s ease; /* 부드러운 확대 효과 */
+                    margin-bottom: 5px; /* 아이콘과 텍스트 간격 조정 */
+                }
+
+                .action-button:hover i, .comment-button:hover i {
+                    transform: scale(1.5); /* 아이콘 확대 */
+                }
+
+                .action-button:hover {
+                    background-color: #f1f1f1;
+                    color: #333333;
+                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+                }
+
+                .checked-button {
+                    background-color: #ff6f61;
+                    color: #ffffff;
+                }
+
+                /* 체크된 버튼 내 아이콘의 색상 */
+                .checked-button i {
+                    color: #e04e4e; /* 연다홍색 아이콘 */
+                }
+
+                .checked-button:hover {
+                    background-color: #f1f1f1;
+                }
+
+                .comment-button {
+                    color: #333333;
+                    background-color: #ffffff;
+                }
+
+                .comment-button:hover {
+                    background-color: #f1f1f1;
+                }
+
+                .film-info {
+                    margin-bottom: 10px;
+                }
+
+                .film-info strong {
+                    color: #555;
+                }
+
+                .film-overview {
+                    margin-top: 20px;
+                    padding: 10px;
+                    background-color: #f9f9f9;
+                    border-radius: 5px;
+                }
+
+                .star-rating {
+                    font-size: 0;
+                    white-space: nowrap;
+                    display: inline-block;
+                    width: 250px;
+                    height: 50px;
+                    overflow: hidden;
+                    position: relative;
+                    background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjREREREREIiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
+                    background-size: 50px 50px;
+                }
+
+                .star-rating label {
+                    opacity: 0;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    height: 100%;
+                    z-index: 1;
+                    background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');
+                    background-size: 50px 50px;
+                }
+
+                .star-rating input {
+                    -moz-appearance: none;
+                    -webkit-appearance: none;
+                    opacity: 0;
+                    display: inline-block;
+                    width: 10%;
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                    z-index: 2;
+                    position: relative;
+                    cursor: pointer;
+                }
+
+                .star-rating input:hover + label,
+                .star-rating input:checked + label {
+                    opacity: 1;
+                }
+
+                .star-rating input:nth-of-type(1) + label {
+                    width: 10%;
+                }
+
+                .star-rating input:nth-of-type(2) + label {
+                    width: 20%;
+                }
+
+                .star-rating input:nth-of-type(3) + label {
+                    width: 30%;
+                }
+
+                .star-rating input:nth-of-type(4) + label {
+                    width: 40%;
+                }
+
+                .star-rating input:nth-of-type(5) + label {
+                    width: 50%;
+                }
+
+                .star-rating input:nth-of-type(6) + label {
+                    width: 60%;
+                }
+
+                .star-rating input:nth-of-type(7) + label {
+                    width: 70%;
+                }
+
+                .star-rating input:nth-of-type(8) + label {
+                    width: 80%;
+                }
+
+                .star-rating input:nth-of-type(9) + label {
+                    width: 90%;
+                }
+
+                .star-rating input:nth-of-type(10) + label {
+                    width: 100%;
+                }
+
+                /* .score 클래스 스타일링 */
+
+
+                .score p {
+                    margin: 0; /* 기본 여백 제거 */
+                    font-size: 18px; /* 기본 폰트 크기 */
+                    color: #333; /* 텍스트 색상 */
+                }
+
+                .score strong {
+                    font-size: 24px; /* 강조된 폰트 크기 */
+                    display: inline-flex; /* 아이콘과 텍스트를 수평으로 정렬 */
+                    align-items: center; /* 수직 가운데 정렬 */
+                }
+
+                .score strong i {
+                    font-size: 24px; /* 아이콘 크기 조정 */
+                }
+
+                .score span {
+                    font-size: 20px; /* 기본 텍스트 크기 조정 */
+                }
+
+                <!--
+                이미지 좌우 넘기기-- >
+                    /* 슬라이드 컨테이너 스타일 */
+                .slider-container {
+                    position: relative;
+                    overflow: hidden;
+                    width: 100%;
+                    max-width: 800px; /* 디자인에 맞게 조정 */
+                    margin: auto;
+                }
+
+                /* 이미지 컨테이너 설정 */
+                .film-container {
+                    display: flex;
+                    transition: transform 0.5s ease;
+                }
+
+                /* 각 슬라이드 카드 스타일 */
+                .film-card {
+                    min-width: 100%;
+                    box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
+                }
+
+                /* 이미지 스타일 */
+                .film-img {
+                    width: 100%;
+                    height: auto;
+                    display: block;
+                }
+
+                /* 버튼 박스 스타일 */
+                .slider-button-box {
+                    top: 50%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    transform: translateY(-50%);
+                }
+
+                /* 좌우 버튼 스타일 */
+                .prev, .next {
+                    background-color: rgba(0, 0, 0, 0.5);
+                    color: #fff;
+                    border: none;
+                    padding: 10px;
+                    cursor: pointer;
+                    font-size: 20px;
+                }
+
+                .image-box {
+                    overflow: hidden;
+                }
+
+                .video-slider-container {
+                    position: relative;
+                    overflow: hidden;
+                    width: 100%;
+                    max-width: 800px; /* Adjust as needed */
+                    margin: auto;
+                }
+
+                .video-film-container {
+                    display: flex;
+                    transition: transform 0.5s ease;
+                }
+
+                .video-film-card {
+                    min-width: 100%;
+                    box-sizing: border-box;
+                }
+
+                iframe {
+                    width: 100%;
+                    height: 400px;
+                }
+
+                .video-slider-button-box {
+                    top: 50%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    transform: translateY(-50%);
+                }
+
+                .video-prev, .video-next {
+                    background-color: rgba(0, 0, 0, 0.5);
+                    color: #fff;
+                    border: none;
+                    padding: 10px;
+                    cursor: pointer;
+                    font-size: 20px;
+                }
+
+                /* New styles for sliders */
+                .slider-section {
+                    margin-top: 40px;
+                }
+
+                .slider-container {
+                    position: relative;
+                    overflow: hidden;
+                    width: 100%;
+                    max-width: 800px;
+                    margin: auto;
+                }
+
+                .slider-content {
+                    display: flex;
+                    transition: transform 0.5s ease;
+                }
+
+                .slider-item {
+                    min-width: 100%;
+                    box-sizing: border-box;
+                    padding: 10px;
+                }
+
+                .slider-button-box {
+                    position: absolute;
+                    top: 50%;
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    transform: translateY(-50%);
+                }
+
+                .slider-button {
+                    background-color: rgba(200, 200, 200);
+                    color: #000;
+                    border: none;
+                    padding: 8px;
+                    cursor: pointer;
+                    font-size: 20px;
+                    border-radius: 10px;
+                    opacity: 20%;
+                }
+
+                .slider-button:hover {
+                    background-color: rgba(200, 200, 200, 0.5);
+                }
+
+                /* Comment styles */
+                .comment-item {
+                    background-color: #f9f9f9;
+                    border-radius: 5px;
+                    padding: 15px;
+                    margin-bottom: 10px;
+                }
+
+                .comment-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 10px;
+                }
+
+                .comment-user {
+                    font-weight: bold;
+                }
+
+                .comment-rating {
+                    color: #f39c12;
+                }
+
+                /* Video styles */
+                .video-container {
+                    position: relative;
+                    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+                    height: 0;
+                    overflow: hidden;
+                }
+
+                .video-container iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
 
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -500,27 +501,29 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <div class="container" th:if="${film}">
-
-        <div class="backdrop-poster">
-            <img th:if="${film.backdropPath}"
-                 th:src="@{'https://image.tmdb.org/t/p/w780' + ${film.backdropPath}}"
-                 class="film-backdrop" alt="영화 배경">
-            <div class="backdrop-content">
-                <h1 class="title" th:text="${film.title}">영화 제목</h1>
-                <div class="release_date">
-                    <strong>개봉일:</strong> <span
-                        th:text="${#temporals.format(film.releaseDate, 'yyyy-MM-dd')}">개봉일</span>
-                </div>
-
-                <div class="originalTitle">
-                    <strong>원제:</strong> <span th:text="${film.originalTitle}">원제</span>
-                </div>
+    <div class="entire-container" th:if="${film}">
+    <div class="backdrop-poster">
+        <img th:if="${film.backdropPath}"
+             th:src="@{'https://image.tmdb.org/t/p/w780' + ${film.backdropPath}}"
+             class="film-backdrop" alt="영화 배경">
+        <div class="backdrop-content">
+            <h1 class="title" th:text="${film.title}">영화 제목</h1>
+            <div class="release_date">
+                <strong>개봉일:</strong> <span
+                    th:text="${#temporals.format(film.releaseDate, 'yyyy-MM-dd')}">개봉일</span>
             </div>
-            <div class="toInfo">
-                <button><i class="fa-solid fa-film"></i></button>
+
+            <div class="originalTitle">
+                <strong>원제:</strong> <span th:text="${film.originalTitle}">원제</span>
             </div>
         </div>
+        <div class="toInfo">
+            <button><i class="fa-solid fa-film"></i></button>
+        </div>
+    </div>
+    <div class="container">
+
+
         <div class="under-backdrop-poster">
 
             <div class="information-list">
@@ -694,6 +697,7 @@
 
         </div>
     </div>
+    </div>
     <div class="container" th:unless="${film != null}">
         <h1>영화 정보를 찾을 수 없습니다.</h1>
     </div>
@@ -746,20 +750,6 @@
                     ratingForm.submit();
                 });
             });
-        });
-
-        document.addEventListener("DOMContentLoaded", function () {
-            var backdrop = document.querySelector('.backdrop-poster');
-            var underBackdrop = document.querySelector('.under-backdrop-poster');
-
-            function updateMargin() {
-                var backdropHeight = backdrop.offsetHeight;
-                underBackdrop.style.marginTop = (backdropHeight - 100) + 'px';
-            }
-
-            updateMargin();
-
-            window.addEventListener('resize', updateMargin);
         });
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -836,7 +826,5 @@
         createSlider('.videos-slider');
     </script>
 </section>
-
-
 </body>
 </html>
